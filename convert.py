@@ -10,7 +10,7 @@ from metadata import metadata
 from pync import Notifier
 
 op = os.path
-log = Logger('homeVideoConverter')
+log = Logger('HandleBar')
 
 class hbHandle(object):
     
