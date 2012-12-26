@@ -115,7 +115,7 @@ class metadata:
         def __init__(self, file):
  
         	self.filePath = file
-        	self.projectPath = os.getcwd()
+        	self.projectPath = os.path.dirname( __file__ )
         	self.AtomicParsleyPath = self.projectPath + "/bin/AtomicParsley"
        	
         def parseFile(self):

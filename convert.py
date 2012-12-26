@@ -16,7 +16,7 @@ class hbHandle(object):
     
     def __init__(self):
     
-    	self.projectPath = os.getcwd()
+    	self.projectPath = os.path.dirname( __file__ )
         self.hbPath = self.projectPath + "/bin/HandBrakeCLI"
         self.readyPath = self.projectPath + "/media/ready"
         self.removedPath = self.projectPath + "/media/done"
