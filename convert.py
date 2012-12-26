@@ -33,7 +33,8 @@ class hbHandle(object):
     		files.extend(self.findRawMedia(path))
     	
     	if not files:
-    		Notifier.notify('No files found', group=os.getpid(), title="HandleBar")
+    		return False
+    		#Notifier.notify('No files found', group=os.getpid(), title="HandleBar")
     	else:
     		newFilepath = os.path.splitext(files[0])[0] + '.m4v'
     		oldFilepath = files[0]
