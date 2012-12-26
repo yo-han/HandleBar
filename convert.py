@@ -10,17 +10,17 @@ from metadata import metadata
 from pync import Notifier
 
 op = os.path
-log = Logger('HandleBar')
+log = Logger('homeVideoConverter')
 
 class hbHandle(object):
     
     def __init__(self):
     
-    	self.projectPath = os.path.dirname( __file__ )
+    	self.projectPath = os.path.dirname(__file__)
         self.hbPath = self.projectPath + "/bin/HandBrakeCLI"
         self.readyPath = self.projectPath + "/media/ready"
         self.removedPath = self.projectPath + "/media/done"
-        self.mediaPaths = ("/Users/johan/Documents/HandleBar/media/tv", "/Users/johan/Documents/HandleBar/media/movies")
+        self.mediaPaths = ("/Users/johan/Downloads/tv", "/Users/johan/Downloads/movies")
         self.fileTypes = ('*.mov', '*.mkv', '*.avi', '*.m2ts', '*.mp4', '*.iso', '*.mpg')
         self.hbPreset = "AppleTV 3"
         self.hbLanguage = "nld,eng"
@@ -43,11 +43,12 @@ class hbHandle(object):
     		
     		guess = guessit.guess_video_info(oldFilepath, info = ['filename'])
     		type = guess['type']
-    		
+
     		Notifier.notify('File: ' + oldFilename, group=os.getpid(), title='HandleBar: Start converting ' + type)
     		
-    		os.system('nice -n 20 ' + self.hbPath + ' -i "' + oldFilepath + '" -o "' + newFilepath + '" --large-file --preset "' + self.hbPreset + '" --native-language "' + self.hbLanguage + '"')    		    		    
-    		
+    		os.system('nice -n 20 ' + self.hbPath + ' -i "' + oldFilepath + '" -o "' + newFilepath + '" --large-file --preset "' + self.hbPreset + '" --native-language "' + self.hbLanguage + '"')    
+	    	print oldFilepath
+		print self.removedPath + '/' + oldFilename
     		Notifier.notify('File: ' + oldFilename, group=os.getpid(), title='HandleBar: Convert done')
     		
     		os.rename(oldFilepath, self.removedPath + '/' + oldFilename)
