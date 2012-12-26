@@ -143,7 +143,7 @@ class metadata:
 					
 				Notifier.notify('Movie: ' + data.movieName, group=os.getpid(), title='HandleBar: Set metadata')
 				
-				os.system(self.AtomicParsleyPath + ' ' + self.filePath + ' --overWrite ' + artwork + ' --title "' + data.movieName + '" --artist "' + data.movieDirector +  '" --genre "' + data.movieGenre + '" --year ' + data.movieReleased + ' --description "' + data.movieDescription + '" --advisory "' + data.movieRating + '" --stik "Normal" --comment "Mustacherioused"' + hd)
+				os.system(self.AtomicParsleyPath + ' ' + self.filePath + ' --overWrite ' + artwork + ' --title "' + data.movieName + '" --artist "' + data.movieDirector +  '" --genre "' + data.movieGenre + '" --year ' + data.movieReleased + ' --description "' + data.movieDescription + '" --advisory "' + data.movieRating + '" --stik "Short Film" --comment "Mustacherioused"' + hd)
 				
 				if image is not "":
 					os.remove(image)

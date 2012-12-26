@@ -3,6 +3,7 @@ HandleBar
 """
 
 import os, sys, glob, time, logging
+import ConfigParser
 import guessit
 from daemon import Daemon
 from logger import Logger 
@@ -10,7 +11,7 @@ from metadata import metadata
 from pync import Notifier
 
 op = os.path
-log = Logger('homeVideoConverter')
+log = Logger('HandleBar')
 
 class hbHandle(object):
     
@@ -47,17 +48,16 @@ class hbHandle(object):
     		Notifier.notify('File: ' + oldFilename, group=os.getpid(), title='HandleBar: Start converting ' + type)
     		
     		os.system('nice -n 20 ' + self.hbPath + ' -i "' + oldFilepath + '" -o "' + newFilepath + '" --large-file --preset "' + self.hbPreset + '" --native-language "' + self.hbLanguage + '"')    
-	    	print oldFilepath
-		print self.removedPath + '/' + oldFilename
+
     		Notifier.notify('File: ' + oldFilename, group=os.getpid(), title='HandleBar: Convert done')
-    		
+
     		os.rename(oldFilepath, self.removedPath + '/' + oldFilename)
     		#os.remove(oldFilepath)
-    		os.rename(newFilepath, self.readyPath + '/' + type + '/' + newFilename)
+    		#os.rename(newFilepath, self.readyPath + '/' + type + '/' + newFilename)
     		
     		Notifier.notify('File: ' + oldFilename, group=os.getpid(), title='HandleBar: Parse metadata')
     		
-    		md = metadata(self.readyPath + '/' + type + '/' + newFilename)
+    		md = metadata(newFilepath)
     		md.parseFile()
 
     	return True
