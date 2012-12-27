@@ -43,13 +43,13 @@ episode_rexps = [ # ... Season 2 ...
                   (r'saison (?P<season>[0-9]+)', 1.0, (0, 0)),
 
                   # ... s02e13 ...
-                  (r'[Ss](?P<season>[0-9]{1,2}).{,3}(?P<episodeNumber>(?:[Ee][0-9]{1,2})+)[^0-9]', 1.0, (0, -1)),
+                  (r'[Ss](?P<season>[0-9]{1,2}).?(?P<episodeNumber>(?:[Ee-][0-9]{1,2})+)[^0-9]', 1.0, (0, -1)),
 
                   # ... s03-x02 ...
-                  (r'[Ss](?P<season>[0-9]{1,2}).{,3}(?P<bonusNumber>(?:[Xx][0-9]{1,2})+)[^0-9]', 1.0, (0, -1)),
+                  (r'[Ss](?P<season>[0-9]{1,2}).?(?P<bonusNumber>(?:[Xx][0-9]{1,2})+)[^0-9]', 1.0, (0, -1)),
 
                   # ... 2x13 ...
-                  (r'[^0-9](?P<season>[0-9]{1,2})(?P<episodeNumber>(?:[xX][0-9]{1,2})+)[^0-9]', 0.8, (1, -1)),
+                  (r'[^0-9](?P<season>[0-9]{1,2}).?(?P<episodeNumber>(?:[xX][0-9]{1,2})+)[^0-9]', 0.8, (1, -1)),
 
                   # ... s02 ...
                   #(sep + r's(?P<season>[0-9]{1,2})' + sep, 0.6, (1, -1)),
@@ -62,7 +62,7 @@ episode_rexps = [ # ... Season 2 ...
                   ('ep' + sep + r'(?P<episodeNumber>[0-9]{1,2})[^0-9]', 0.7, (0, -1)),
 
                   # ... e13 ... for a mini-series without a season number
-                  (sep + r'e(?P<episodeNumber>[0-9]{1,2})[^0-9]', 0.6, (1, -1))
+                  (sep + r'e(?P<episodeNumber>[0-9]{1,2})' + sep, 0.6, (1, -1))
 
                   ]
 
