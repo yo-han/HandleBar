@@ -21,6 +21,7 @@ def ConfigSectionMap(section):
     
 DebugMode  = Config.getboolean("HandleBarConfig", "Debug")
 NotificationOn  = Config.getboolean("HandleBarConfig", "NotificationOn")
+
 HandbrakeCLIPath = path + Config.get("HandleBarConfig","HandbrakeCLIPath")
 DebugRemovePath = path + Config.get("HandleBarConfig","DebugRemovePath")
 MediaPathsString = Config.get("HandleBarConfig","MediaPaths")

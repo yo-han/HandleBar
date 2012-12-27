@@ -14,6 +14,9 @@ projectDir = os.path.abspath(os.path.dirname(__file__))
 
 """ Logger (not in use, but can be used for debugging purposes """
 log = Logger('HandleBar')
+
+""" Files db """
+filesTable = Files()
 	
 class hbHandle(object):
     
@@ -43,9 +46,17 @@ class hbHandle(object):
     		guess = guessit.guess_video_info(oldFilepath, info = ['filename'])
     		type = guess['type']
     		
+    		fileId = filesTable.new(type, oldFilename)
+    		
+    		if not fileId:
+    			Notify('Insert of new file record failed', 'HandleBar: Error')
+    			return False
+    		
     		Notify('File: ' + oldFilename, 'HandleBar: Start converting ' + type)
     		
     		os.system('nice -n 20 ' + HandbrakeCLIPath + ' -i "' + oldFilepath + '" -o "' + newFilepath + '" --large-file --preset "' + HandBrakePreset + '" --native-language "' + HandBrakeLanguage + '"')    
+    		
+    		filesTable.convertDone(fileId)
     		
     		Notifier.notify('File: ' + oldFilename, group=os.getpid(), title='HandleBar: Convert done')
 
@@ -56,8 +67,13 @@ class hbHandle(object):
     		
     		Notify('File: ' + oldFilename, 'HandleBar: Parse metadata')
     		
-    		md = metadata(newFilepath)
+    		md = metadata(newFilepath, fileId)
     		md.parseFile()
+    		
+    		Notify('Copy to iTunes', 'HandleBar')
+    		
+    		os.system("osascript -e 'tell application \"iTunes\" to add POSIX file \"" + md.filePath + "\"'")
+    		os.remove(md.filePath)
 
     	return True
     		
@@ -83,6 +99,7 @@ class movie:
 		self.movieReleased = ""
 		self.movieDirector = ""
 		self.movieGenre = ""
+		self.imdbId = ""
 					
 	def getMovie(self):
 		
@@ -95,7 +112,7 @@ class movie:
 			movie = tmdb.getMovieInfo(results[0]['id'])
 			
 			""" What to expect """
-			#print movie.keys()
+			print movie.keys()
 						
 			self.movieImage = self.setImage(movie['images'][0])
 			self.movieName = movie['name']
@@ -104,6 +121,7 @@ class movie:
 			self.movieReleased = movie['released']
 			self.movieDirector = movie['cast']['director'][0]['name']
 			self.movieGenre = movie['categories']['genre'].keys()[0]
+			self.imdbId = movie['imdb_id']
 						
 			return self
 			
@@ -174,9 +192,10 @@ class metadata:
        
         Usage: subclass the Daemon class and override the run() method
         """
-        def __init__(self, file):
+        def __init__(self, file, fileId):
  
         	self.filePath = file
+        	self.fileId = fileId
         	self.AtomicParsleyPath = projectDir + "/bin/AtomicParsley"
        	
         def parseFile(self):
@@ -206,8 +225,7 @@ class metadata:
 				
 				os.system(self.AtomicParsleyPath + ' ' + self.filePath + ' --overWrite ' + artwork + ' --title "' + data.movieName + '" --artist "' + data.movieDirector +  '" --genre "' + data.movieGenre + '" --year ' + data.movieReleased + ' --description "' + data.movieDescription + '" --advisory "' + data.movieRating + '" --stik "Short Film" --comment "Mustacherioused"' + hd)
 				
-				if image is not "":
-					os.remove(image)
+				filesTable.movie(self.fileId, data.movieName, image, data.movieDirector, data.movieGenre, data.movieReleased, data.movieDescription, data.movieRating, data.imdbId, hd)
 				
 			elif guess['type'] == "episode":
 			
@@ -232,19 +250,13 @@ class metadata:
 							
 				os.system(self.AtomicParsleyPath + ' ' + self.filePath + ' --overWrite ' + artwork + ' --TVShowName "' + title + '" --TVSeasonNum "' + str(data.seriesSeason) +  '" --TVEpisodeNum "' + str(data.seriesEpisode) + '" --TVNetwork "' + str(data.seriesNetwork) + '" --title "' + data.seriesEpisodeName + '" --description "' + data.seriesDescription + '" --advisory "' + data.seriesRating + '" --year "' + data.seriesAirDate + '" --genre "' + data.seriesGenre + '" --track "' + str(data.seriesEpisode) + '" --disk  "' + str(data.seriesSeason) + '" --stik "TV Show" --comment "Mustacherioused"' + hd)
 				
-				if image is not "":
-					os.remove(image)
-			
-			Notify('Copy to iTunes', 'HandleBar')
-			
-			os.system("osascript -e 'tell application \"iTunes\" to add POSIX file \"" + self.filePath + "\"'")
-			os.remove(self.filePath)
-			
+				filesTable.episode(self.fileId, title, image, data.seriesSeason, data.seriesEpisode, data.seriesNetwork, data.seriesEpisodeName, data.seriesDescription, data.seriesRating, data.seriesAirDate, data.seriesGenre, hd)
+									
 			return True
         	
         def downloadImage(self, url):
         	
-        	path = projectDir + '/media/' + os.path.basename(url)
+        	path = projectDir + '/media/images/' + os.path.basename(url)
         	downloaded = False
         	
         	for i in range(0,5):
