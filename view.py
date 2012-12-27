@@ -6,6 +6,8 @@ from app import *
 
 projectDir = os.path.abspath(os.path.dirname(__file__))
 
+bottle.TEMPLATE_PATH.insert(0, projectDir + '/media/templates/')
+
 app = Bottle()
 filesTable = Files()
 

@@ -3164,7 +3164,7 @@ simpletal_view = functools.partial(view, template_adapter=SimpleTALTemplate)
 # Constants and Globals ########################################################
 ###############################################################################
 
-TEMPLATE_PATH = ['./', 'HandleBar/media/templates/']
+TEMPLATE_PATH = ['./']
 TEMPLATES = {}
 DEBUG = False
 NORUN = False # If set, run() does nothing. Used by load_app()
