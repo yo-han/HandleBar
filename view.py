@@ -1,7 +1,8 @@
 """ HandleBar webserver """
 
-import os 
+import os, socket 
 from lib import *
+from app import *
 
 projectDir = os.path.abspath(os.path.dirname(__file__))
 
@@ -13,11 +14,14 @@ filesTable = Files()
 def index(appName="HandleBar"):
 	bottle.TEMPLATES.clear()
 	
+	fileList = filesTable.list()
 	
-	return dict(appName=appName)
+	return dict(appName=appName, list=fileList)
 
 @app.route('/media/<filepath:path>')
 def static(filepath):
     return static_file(filepath, root=projectDir + '/media/')
 
-run(app, host='localhost', port=8082)
+host = socket.gethostbyname(socket.gethostname())
+
+run(app, host=host, port=8082)

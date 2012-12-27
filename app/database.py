@@ -62,9 +62,8 @@ class Files(object):
 		    con.row_factory = lite.Row
 		    
 		    cur = con.cursor()    
-		    cur.execute("SELECT * FROM files")
+		    cur.execute("SELECT * FROM files ORDER BY createDate DESC")
 		
 		    rows = cur.fetchall()
 		
-		    for row in rows:
-		        print row['name']
+		    return rows
