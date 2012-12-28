@@ -67,3 +67,9 @@ class Files(object):
 		    rows = cur.fetchall()
 		
 		    return rows
+	
+	def clearDb(self):
+		with con:  
+			cur = con.cursor()
+			cur.execute("delete from files")
+			cur.execute("delete from sqlite_sequence where name='files'")

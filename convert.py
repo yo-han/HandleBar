@@ -204,7 +204,7 @@ class metadata:
        		self.setMetaData(guess)
         
         def setMetaData(self, guess):
-        
+        	
         	hd = ""
         	
         	if "screenSize" in guess and (guess['screenSize'] == '720p' or guess['screenSize'] == '1080p'):
@@ -214,7 +214,11 @@ class metadata:
 				
 				mvd = movie(guess['title'])
 				data = mvd.getMovie()
-				
+			
+				if not data:
+					Notify('No data found for this movie', 'HandleBar: Error')
+					return False
+					
 				artwork = ""
 
 				image = self.downloadImage(data.movieImage)     

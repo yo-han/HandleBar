@@ -19,6 +19,15 @@ def index(appName="HandleBar"):
 	fileList = filesTable.list()
 	
 	return dict(appName=appName, list=fileList)
+	
+@app.route('/clear')
+def clearDb():
+	ci = request.query.c
+	
+	if ci == "imsure":
+		filesTable.clearDb()
+		
+	redirect("/")
 
 @app.route('/media/<filepath:path>')
 def static(filepath):
