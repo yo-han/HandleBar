@@ -41,7 +41,7 @@ class runHandleBar(object):
 	    f.close()
 
 	def start(self):
-		p = subprocess.Popen(['python', projectDir + '/view.py'])
+		p = subprocess.Popen(['nohup', 'python', projectDir + '/view.py'])
 		self.pid(str(p.pid), pidFileServer)
 		
 		subprocess.Popen(['python', projectDir + '/convert.py', 'start'])
