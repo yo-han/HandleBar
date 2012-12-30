@@ -31,7 +31,7 @@ def clearDb():
 
 @app.route('/media/<filepath:path>')
 def static(filepath):
-    return static_file(filepath, root=projectDir + '/media/')
+	return static_file(filepath, root=projectDir + '/media/')
 
 host = socket.gethostbyname(socket.gethostname())
 
