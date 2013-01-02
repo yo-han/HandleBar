@@ -2,9 +2,22 @@ import ConfigParser, os
 
 path = os.path.abspath(os.path.dirname(__file__)) + "/../"
 
+""" App support path """
+try:
+	pf = file(path + "configPath",'r')
+	appSupportPath = pf.read().strip()
+	pf.close()
+except IOError:
+	print "Not running in menulet"
+
+if path.find("HandleBarApp.app") is not -1:
+	configPath = appSupportPath
+else:
+	configPath = path
+
 """ Config """
 Config = ConfigParser.ConfigParser()
-Config.read(path + "config.ini")
+Config.read(configPath + "/config.ini")
 
 def ConfigSectionMap(section):
     dict1 = {}
@@ -23,8 +36,10 @@ DebugMode  = Config.getboolean("HandleBarConfig", "Debug")
 NotificationOn  = Config.getboolean("HandleBarConfig", "NotificationOn")
 
 HandbrakeCLIPath = path + Config.get("HandleBarConfig","HandbrakeCLIPath")
-DebugRemovePath = path + Config.get("HandleBarConfig","DebugRemovePath")
+DebugRemovePath = Config.get("HandleBarConfig","DebugRemovePath")
+DebugFailedPath = Config.get("HandleBarConfig","DebugFailedPath")
 MediaPathsString = Config.get("HandleBarConfig","MediaPaths")
+HandleBarConfigPath = configPath;
 
 FileTypeString = Config.get("HandleBarConfig","FileTypes")
 HandBrakePreset = Config.get("HandleBarConfig","HandBrakePreset")

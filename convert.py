@@ -56,12 +56,18 @@ class hbHandle(object):
     		
     		os.system('nice -n 20 ' + HandbrakeCLIPath + ' -i "' + oldFilepath + '" -o "' + newFilepath + '" --large-file --preset "' + HandBrakePreset + '" --native-language "' + HandBrakeLanguage + '"')    
     		
+    		try:
+    			with open(newFilepath) as f: pass
+    		except IOError as e:
+    			os.rename(oldFilepath, HandleBarConfigPath + DebugFailedPath + '/' + oldFilename)
+    			return False
+    			
     		filesTable.convertDone(fileId)
     		
     		Notifier.notify('File: ' + oldFilename, group=os.getpid(), title='HandleBar: Convert done')
 
     		if DebugMode:
-    			os.rename(oldFilepath, DebugRemovePath + '/' + oldFilename)
+    			os.rename(oldFilepath, HandleBarConfigPath + DebugRemovePath + '/' + oldFilename)
     		else:
     			os.remove(oldFilepath)
     		
@@ -197,10 +203,11 @@ class metadata:
         	self.filePath = file
         	self.fileId = fileId
         	self.AtomicParsleyPath = projectDir + "/bin/AtomicParsley"
-       	
+        	       	
         def parseFile(self):
 	   
         	guess = guessit.guess_video_info(self.filePath, info = ['filename'])
+        	
        		self.setMetaData(guess)
         
         def setMetaData(self, guess):
@@ -209,8 +216,8 @@ class metadata:
         	
         	if "screenSize" in guess and (guess['screenSize'] == '720p' or guess['screenSize'] == '1080p'):
         		hd = ' --meta-uuid "hdvd" true'
-
-			if guess['type'] == "movie":
+            
+ 			if guess['type'] == "movie":
 				
 				mvd = movie(guess['title'])
 				data = mvd.getMovie()
@@ -294,7 +301,9 @@ class ConvertDaemon(Daemon):
 			hb.check()
         	 
 if __name__ == "__main__":
+
 	daemon = ConvertDaemon('/tmp/convert-daemon.pid')
+	
 	if len(sys.argv) == 2:
 		if 'start' == sys.argv[1]:
 			daemon.start()

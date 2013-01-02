@@ -60,11 +60,19 @@ class Daemon:
        
         def delpid(self):
                 os.remove(self.pidfile)
- 
+        
+        def dead(self, pid):
+        	from os import kill
+        	try:
+        		if kill(pid,0): return True 
+        	except OSError, err:
+        		return True
+        		       
         def start(self):
                 """
                 Start the daemon
                 """
+                retry = False
                 # Check for a pidfile to see if the daemon already runs
                 try:
                         pf = file(self.pidfile,'r')
@@ -74,9 +82,14 @@ class Daemon:
                         pid = None
        
                 if pid:
-                        message = "pidfile %s already exist. Daemon already running?\n"
-                        sys.stderr.write(message % self.pidfile)
-                        sys.exit(1)
+                		if not self.dead(pid) and retry == False:
+                			self.stop()
+                			self.start()
+                			retry = True
+                		
+                		message = "pidfile %s already exist. Daemon already running?\n"
+                		sys.stderr.write(message % self.pidfile)
+                		sys.exit(1)
                
                 # Start the daemon
                 self.daemonize()

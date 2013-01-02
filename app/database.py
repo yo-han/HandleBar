@@ -3,7 +3,20 @@ import sqlite3 as lite
 
 path = os.path.abspath(os.path.dirname(__file__)) + "/../"
 
-con = lite.connect(path + 'handleBar.db')
+""" App support path """
+try:
+	pf = file(path + "configPath",'r')
+	appSupportPath = pf.read().strip()
+	pf.close()
+except IOError:
+	print "Not running in menulet"
+
+if path.find("HandleBarApp.app") is not -1:
+	dbPath = appSupportPath
+else:
+	dbPath = path
+
+con = lite.connect(dbPath + '/handleBar.db')
 
 class Files(object):
 	
