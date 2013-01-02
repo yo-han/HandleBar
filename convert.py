@@ -74,7 +74,11 @@ class hbHandle(object):
     		Notify('File: ' + oldFilename, 'HandleBar: Parse metadata')
     		
     		md = metadata(newFilepath, fileId)
-    		md.parseFile()
+    		result = md.parseFile()
+    		
+    		if result != True:
+    			os.rename(newFilepath, HandleBarConfigPath + DebugFailedPath + '/' + newFilename)
+    			return False
     		
     		Notify('Copy to iTunes', 'HandleBar')
     		
@@ -208,7 +212,7 @@ class metadata:
 	   
         	guess = guessit.guess_video_info(self.filePath, info = ['filename'])
         	
-       		self.setMetaData(guess)
+       		return self.setMetaData(guess)
         
         def setMetaData(self, guess):
         	
@@ -216,12 +220,12 @@ class metadata:
         	
         	if "screenSize" in guess and (guess['screenSize'] == '720p' or guess['screenSize'] == '1080p'):
         		hd = ' --meta-uuid "hdvd" true'
-            
+              
  			if guess['type'] == "movie":
-				
+
 				mvd = movie(guess['title'])
 				data = mvd.getMovie()
-			
+				
 				if not data:
 					Notify('No data found for this movie', 'HandleBar: Error')
 					return False
@@ -238,8 +242,10 @@ class metadata:
 				
 				filesTable.movie(self.fileId, data.movieName, os.path.basename(image), data.movieDirector, data.movieGenre, data.movieReleased, data.movieDescription, data.movieRating, data.imdbId, hd)
 				
+				return True
+				
 			elif guess['type'] == "episode":
-			
+
 				episode = tvEpisode(guess)
 				data = episode.getEpisode()
 				
@@ -262,8 +268,11 @@ class metadata:
 				os.system(self.AtomicParsleyPath + ' ' + self.filePath + ' --overWrite ' + artwork + ' --TVShowName "' + title + '" --TVSeasonNum "' + str(data.seriesSeason) +  '" --TVEpisodeNum "' + str(data.seriesEpisode) + '" --TVNetwork "' + str(data.seriesNetwork) + '" --title "' + data.seriesEpisodeName + '" --description "' + data.seriesDescription + '" --advisory "' + data.seriesRating + '" --year "' + data.seriesAirDate + '" --genre "' + data.seriesGenre + '" --track "' + str(data.seriesEpisode) + '" --disk  "' + str(data.seriesSeason) + '" --stik "TV Show" --comment "Mustacherioused"' + hd)
 				
 				filesTable.episode(self.fileId, title, os.path.basename(image), data.seriesSeason, data.seriesEpisode, data.seriesNetwork, data.seriesEpisodeName, data.seriesDescription, data.seriesRating, data.seriesAirDate, data.seriesGenre, hd)
-									
-			return True
+				
+				return True
+			else:
+				return False									
+			
         	
         def downloadImage(self, url):
         	

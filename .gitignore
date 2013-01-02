@@ -5,3 +5,4 @@
 /media/movies
 *.pyc
 media/images/*
+media/failed/*
