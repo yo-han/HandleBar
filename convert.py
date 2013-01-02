@@ -121,12 +121,12 @@ class movie:
 			print movie.keys()
 						
 			self.movieImage = self.setImage(movie['images'][0])
-			self.movieName = movie['name']
-			self.movieDescription = movie['overview']
-			self.movieRating = movie['rating']
+			self.movieName = movie['name'].encode('utf-8').strip()
+			self.movieDescription = movie['overview'].encode('utf-8').strip()
+			self.movieRating = movie['rating'].encode('utf-8').strip()
 			self.movieReleased = movie['released']
-			self.movieDirector = movie['cast']['director'][0]['name']
-			self.movieGenre = movie['categories']['genre'].keys()[0]
+			self.movieDirector = movie['cast']['director'][0]['name'].encode('utf-8').strip()
+			self.movieGenre = movie['categories']['genre'].keys()[0].encode('utf-8').strip()
 			self.imdbId = movie['imdb_id']
 						
 			return self
