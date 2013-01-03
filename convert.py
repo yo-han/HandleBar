@@ -89,7 +89,7 @@ class hbHandle(object):
 						    with timeout of 30000 seconds
 						        add ("%s" as POSIX file)
 						    end timeout
-						end tell""" % md.filePath)
+						end tell'""" % md.filePath)
     		os.remove(md.filePath)
 
     	return True
