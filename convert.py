@@ -54,7 +54,7 @@ class hbHandle(object):
     		
     		Notify('File: ' + oldFilename, 'HandleBar: Start converting ' + type)
     		
-    		os.system('nice -n 20 ' + HandbrakeCLIPath + ' -i "' + oldFilepath + '" -o "' + newFilepath + '" --large-file --preset "' + HandBrakePreset + '" --native-language "' + HandBrakeLanguage + '" --native-dub "' + HandBrakeLanguage + '" --audio "1,2,3,4"')    
+    		os.system('nice -n 20 ' + HandbrakeCLIPath + ' -i "' + oldFilepath + '" -o "' + newFilepath + '" --large-file --preset "' + HandBrakePreset + '" --native-language "' + HandBrakeLanguage + '" --native-dub "' + HandBrakeLanguage + '"')    
     		
     		try:
     			with open(newFilepath) as f: pass
