@@ -82,7 +82,15 @@ class hbHandle(object):
     		
     		Notify('Copy to iTunes', 'HandleBar')
     		    		
-    		os.system("osascript -e 'tell application \"iTunes\"  to add POSIX file \"" + md.filePath + "\"'")
+    		#os.system("osascript -e 'tell application \"iTunes\"  to add POSIX file \"" + md.filePath + "\"'")
+    		os.system("""osascript << EOF
+						tell application "iTunes"
+						    launch
+						    with timeout of 30000 seconds
+						        add ("%s" as POSIX file)
+						    end timeout
+						end tell
+						EOF""" % md.filePath)
     		os.remove(md.filePath)
 
     	return True
@@ -218,10 +226,10 @@ class metadata:
         
         def setMetaData(self, guess):
         	
-        	hd = ""
+        	hd = []
         	
         	if "screenSize" in guess and (guess['screenSize'] == '720p' or guess['screenSize'] == '1080p'):
-        		hd = ' --meta-uuid "hdvd" true'
+        		hd = ['--meta-uuid','hdvd','true']
               
  			if guess['type'] == "movie":
 
@@ -232,15 +240,19 @@ class metadata:
 					Notify('No data found for this movie', 'HandleBar: Error')
 					return False
 					
-				artwork = ""
+				artwork = []
 
 				image = self.downloadImage(data.movieImage)     
 				if image is not "":
-					artwork = '--artwork "' + image + '"'
+					artwork = ['--artwork',image]
 					
 				Notify('Movie: ' + data.movieName, 'HandleBar: Set metadata')
 				
-				os.system(self.AtomicParsleyPath + ' ' + self.filePath + ' --overWrite ' + artwork + ' --title "' + data.movieName + '" --artist "' + data.movieDirector +  '" --genre "' + data.movieGenre + '" --year ' + data.movieReleased + ' --description "' + data.movieDescription + '" --advisory "' + data.movieRating + '" --stik "Short Film" --comment "Mustacherioused"' + hd)
+				#os.system(self.AtomicParsleyPath + ' ' + self.filePath + ' --overWrite ' + artwork + ' --title "' + data.movieName + '" --artist "' + data.movieDirector +  '" --genre "' + data.movieGenre + '" --year ' + data.movieReleased + ' --description "' + data.movieDescription + '" --advisory "' + data.movieRating + '" --stik "Short Film" --comment "Mustacherioused"' + hd)
+				alist = [self.AtomicParsleyPath, self.filePath, '--overWrite','--title',data.movieName,'--artist',data.movieDirector,'--genre',data.movieGenre,'--year',data.movieReleased,'--description',data.movieDescription,'--advisory',data.movieRating,'--stik','Short Film','--comment','Mustacherioused']
+				arguments = alist + artwork + hd
+				
+				subprocess.call(arguments, shell = False)
 				
 				filesTable.movie(self.fileId, data.movieName, os.path.basename(image), data.movieDirector, data.movieGenre, data.movieReleased, data.movieDescription, data.movieRating, data.imdbId, hd)
 				
@@ -251,7 +263,7 @@ class metadata:
 				episode = tvEpisode(guess)
 				data = episode.getEpisode()
 				
-				artwork = ""
+				artwork = []
 				title = ""
 				
 				image = self.downloadImage(data.seriesImage)    
@@ -268,9 +280,12 @@ class metadata:
 				Notify('TV Show: ' + title, 'HandleBar: Set metadata')
 							
 				#os.system(self.AtomicParsleyPath + ' ' + self.filePath + ' --overWrite ' + artwork + ' --TVShowName "' + title + '" --TVSeasonNum "' + str(data.seriesSeason) +  '" --TVEpisodeNum "' + str(data.seriesEpisode) + '" --TVNetwork "' + str(data.seriesNetwork) + '" --title "' + data.seriesEpisodeName + '" --description "' + data.seriesDescription + '" --advisory "' + data.seriesRating + '" --year "' + data.seriesAirDate + '" --genre "' + data.seriesGenre + '" --track "' + str(data.seriesEpisode) + '" --disk  "' + str(data.seriesSeason) + '" --stik "TV Show" --comment "Mustacherioused"' + hd)
+				
 				alist = [self.AtomicParsleyPath, self.filePath, '--overWrite','--TVShowName',title,'--TVSeasonNum',str(data.seriesSeason),'--TVEpisodeNum',str(data.seriesEpisode),'--TVNetwork',str(data.seriesNetwork),'--title',data.seriesEpisodeName,'--description',data.seriesDescription,'--advisory',data.seriesRating,'--year',data.seriesAirDate,'--genre',data.seriesGenre,'--track',str(data.seriesEpisode),'--disk',str(data.seriesSeason),'--stik','TV Show','--comment','Mustacherioused']
-				arguments = alist + artwork 
+				arguments = alist + artwork + hd
+				
 				subprocess.call(arguments, shell = False)
+				
 				filesTable.episode(self.fileId, title, os.path.basename(image), data.seriesSeason, data.seriesEpisode, data.seriesNetwork, data.seriesEpisodeName, data.seriesDescription, data.seriesRating, data.seriesAirDate, data.seriesGenre, hd)
 				
 				return True
