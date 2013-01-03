@@ -188,12 +188,14 @@ class tvEpisode:
 		self.seriesTitle  = tvdb[self.seriesTitle]['seriesname'].encode('utf-8').strip()
 		self.seriesEpisodeName  = tvdb[self.seriesTitle][int(self.seriesSeason)][int(self.seriesEpisode)]['episodename'].encode('utf-8').strip()
 		self.seriesDescription  = tvdb[self.seriesTitle][int(self.seriesSeason)][int(self.seriesEpisode)]['overview'].encode('utf-8').strip()
-		self.seriesRating  = tvdb[self.seriesTitle]['contentrating'].encode('utf-8').strip()
 		self.seriesAirDate = tvdb[self.seriesTitle][int(self.seriesSeason)][int(self.seriesEpisode)]['firstaired'].encode('utf-8').strip()
 		self.seriesNetwork = tvdb[self.seriesTitle]['network'].encode('utf-8').strip()
 		
 		self.seriesGenre = (tvdb[self.seriesTitle]['genre'])[1:len(tvdb[self.seriesTitle]['genre'])]
 		self.seriesGenre = self.seriesGenre[0:self.seriesGenre.find("|")].encode('utf-8').strip()
+		
+		if tvdb[self.seriesTitle]['contentrating'] is not None:
+			self.seriesRating  = tvdb[self.seriesTitle]['contentrating'].encode('utf-8').strip()
 		
 		return self
 				
