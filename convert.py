@@ -83,14 +83,13 @@ class hbHandle(object):
     		Notify('Copy to iTunes', 'HandleBar')
     		    		
     		#os.system("osascript -e 'tell application \"iTunes\"  to add POSIX file \"" + md.filePath + "\"'")
-    		os.system("""osascript << EOF
+    		os.system("""osascript
 						tell application "iTunes"
 						    launch
 						    with timeout of 30000 seconds
 						        add ("%s" as POSIX file)
 						    end timeout
-						end tell
-						EOF""" % md.filePath)
+						end tell""" % md.filePath)
     		os.remove(md.filePath)
 
     	return True
