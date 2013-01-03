@@ -256,7 +256,7 @@ class metadata:
 				
 				image = self.downloadImage(data.seriesImage)    
 				if image is not "":
-					artwork = ('--artwork',image)
+					artwork = ['--artwork',image]
 				
 				if data.seriesTitle.find('revolution.') != -1:
 					title = data.seriesTitle[:-5]
