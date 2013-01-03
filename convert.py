@@ -82,8 +82,7 @@ class hbHandle(object):
     		
     		Notify('Copy to iTunes', 'HandleBar')
     		    		
-    		#os.system("osascript -e 'tell application \"iTunes\"  to add POSIX file \"" + md.filePath + "\"")
-    		os.system("open -a " + projectDir + "/copyToItunes.app " + md.filePath)
+    		os.system("osascript -e 'tell application \"iTunes\"  to add POSIX file \"" + md.filePath + "\"")
     		os.remove(md.filePath)
 
     	return True
@@ -257,7 +256,7 @@ class metadata:
 				
 				image = self.downloadImage(data.seriesImage)    
 				if image is not "":
-					artwork = '--artwork "' + image + '"'			
+					artwork = ('--artwork',image)
 				
 				if data.seriesTitle.find('revolution.') != -1:
 					title = data.seriesTitle[:-5]
@@ -269,7 +268,9 @@ class metadata:
 				Notify('TV Show: ' + title, 'HandleBar: Set metadata')
 							
 				#os.system(self.AtomicParsleyPath + ' ' + self.filePath + ' --overWrite ' + artwork + ' --TVShowName "' + title + '" --TVSeasonNum "' + str(data.seriesSeason) +  '" --TVEpisodeNum "' + str(data.seriesEpisode) + '" --TVNetwork "' + str(data.seriesNetwork) + '" --title "' + data.seriesEpisodeName + '" --description "' + data.seriesDescription + '" --advisory "' + data.seriesRating + '" --year "' + data.seriesAirDate + '" --genre "' + data.seriesGenre + '" --track "' + str(data.seriesEpisode) + '" --disk  "' + str(data.seriesSeason) + '" --stik "TV Show" --comment "Mustacherioused"' + hd)
-				subprocess.call([self.AtomicParsleyPath, self.filePath, '--overWrite', artwork], shell = False)
+				alist = [self.AtomicParsleyPath, self.filePath, '--overWrite']
+				arguments = alist + artwork 
+				subprocess.call(arguments, shell = False)
 				filesTable.episode(self.fileId, title, os.path.basename(image), data.seriesSeason, data.seriesEpisode, data.seriesNetwork, data.seriesEpisodeName, data.seriesDescription, data.seriesRating, data.seriesAirDate, data.seriesGenre, hd)
 				
 				return True
