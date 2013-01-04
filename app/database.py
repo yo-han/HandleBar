@@ -17,6 +17,7 @@ else:
 	dbPath = path
 
 con = lite.connect(dbPath + '/handleBar.db')
+con.text_factory = str
 
 class Files(object):
 	
