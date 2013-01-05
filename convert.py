@@ -198,7 +198,7 @@ class tvEpisode:
 			if artwork['language'] == "en" and int(artwork['season']) == int(self.seriesSeason):
 				self.seriesImage = artwork['_bannerpath']
 				break 
-		
+		print tvdb[self.seriesTitle]
 		self.seriesTitle  = tvdb[self.seriesTitle]['seriesname'].encode('utf-8').strip()
 		self.seriesEpisodeName  = tvdb[self.seriesTitle][int(self.seriesSeason)][int(self.seriesEpisode)]['episodename'].encode('utf-8').strip()
 		self.seriesDescription  = tvdb[self.seriesTitle][int(self.seriesSeason)][int(self.seriesEpisode)]['overview'].encode('utf-8').strip()
