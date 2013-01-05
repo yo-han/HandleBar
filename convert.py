@@ -45,8 +45,15 @@ class hbHandle(object):
     		
     		guess = guessit.guess_video_info(oldFilepath, info = ['filename'])
     		type = guess['type']
-    		
+    		   		
     		fileId = filesTable.new(type, oldFilename)
+    		
+    		""" Metadata testing """
+    		"""md = metadata(oldFilepath, fileId)
+    		result = md.parseFile()
+    		print result
+    		sys.exit(0)
+    		"""
     		
     		if not fileId:
     			Notify('Insert of new file record failed', 'HandleBar: Error')
@@ -225,17 +232,19 @@ class metadata:
        		return self.setMetaData(guess)
         
         def setMetaData(self, guess):
-        	
-        	hd = []
-        	
+
         	if "screenSize" in guess and (guess['screenSize'] == '720p' or guess['screenSize'] == '1080p'):
         		hd = ['--meta-uuid','hdvd','true']
-              
- 			if guess['type'] == "movie":
-
-				mvd = movie(guess['title'])
-				data = mvd.getMovie()
+        	else:
+        		hd = []
+        		
+			if guess['type'] == "movie":
 				
+				print "Movie"
+ 				
+ 				mvd = movie(guess['title'])
+				data = mvd.getMovie()
+				print data
 				if not data:
 					Notify('No data found for this movie', 'HandleBar: Error')
 					return False
@@ -257,9 +266,11 @@ class metadata:
 				filesTable.movie(self.fileId, data.movieName, os.path.basename(image), data.movieDirector, data.movieGenre, data.movieReleased, data.movieDescription, data.movieRating, data.imdbId, hd)
 				
 				return True
-				
+							
 			elif guess['type'] == "episode":
-
+				
+				print "TV Show"
+				
 				episode = tvEpisode(guess)
 				data = episode.getEpisode()
 				
@@ -290,7 +301,8 @@ class metadata:
 				
 				return True
 			else:
-				return False									
+				print "Unknown type"
+				return False										
 			
         	
         def downloadImage(self, url):
