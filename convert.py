@@ -49,10 +49,11 @@ class hbHandle(object):
     		fileId = filesTable.new(type, oldFilename)
     		
     		""" Metadata testing """
-    		md = metadata(oldFilepath, fileId)
+    		"""md = metadata(oldFilepath, fileId)
     		result = md.parseFile()
     		print result
     		sys.exit(0)
+    		"""
     		
     		
     		if not fileId:
