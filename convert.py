@@ -49,13 +49,12 @@ class hbHandle(object):
     		fileId = filesTable.new(type, oldFilename)
     		
     		""" Metadata testing """
-    		"""md = metadata(oldFilepath, fileId)
+    		"""
+    		md = metadata(oldFilepath, fileId)
     		result = md.parseFile()
     		print result
-    		sys.exit(0)
-    		"""
-    		
-    		
+    		sys.exit(0)"""
+    	    		
     		if not fileId:
     			Notify('Insert of new file record failed', 'HandleBar: Error')
     			return False
@@ -245,7 +244,7 @@ class metadata:
 					
             	mvd = movie(guess['title'])
             	data = mvd.getMovie()
-            	print data
+
             	if not data:
             		Notify('No data found for this movie', 'HandleBar: Error')
             		return False
@@ -259,6 +258,8 @@ class metadata:
             	Notify('Movie: ' + data.movieName, 'HandleBar: Set metadata')
 				
             	#os.system(self.AtomicParsleyPath + ' ' + self.filePath + ' --overWrite ' + artwork + ' --title "' + data.movieName + '" --artist "' + data.movieDirector +  '" --genre "' + data.movieGenre + '" --year ' + data.movieReleased + ' --description "' + data.movieDescription + '" --advisory "' + data.movieRating + '" --stik "Short Film" --comment "Mustacherioused"' + hd)
+            	subprocess.call([self.AtomicParsleyPath, self.filePath, '--artwork','REMOVE_ALL']);
+            	
             	alist = [self.AtomicParsleyPath, self.filePath, '--overWrite','--title',data.movieName,'--artist',data.movieDirector,'--genre',data.movieGenre,'--year',data.movieReleased,'--description',data.movieDescription,'--advisory',data.movieRating,'--stik','Short Film','--comment','Mustacherioused']
             	arguments = alist + artwork + hd
 				
