@@ -34,6 +34,7 @@ class hbHandle(object):
     		
     		if not DebugMode:
     			return False
+    			
     		    			
     	else:
     		newFilepath = os.path.splitext(files[0])[0] + '.m4v'
@@ -345,7 +346,7 @@ class ConvertDaemon(Daemon):
         	 
 if __name__ == "__main__":
 
-	daemon = ConvertDaemon('/tmp/convert-daemon.pid')
+	daemon = ConvertDaemon('/tmp/convert-daemon.pid', '/dev/null', '/tmp/dOut.log', '/tmp/dErr.log')
 	
 	if len(sys.argv) == 2:
 		if 'start' == sys.argv[1]:
