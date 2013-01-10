@@ -108,7 +108,10 @@ class hbHandle(object):
     	
     	for root, dirs, files in os.walk(path):
     		for files in FileTypes:
-    			media.extend(glob.glob(root + '/' + files))
+    			fp = root + '/' + files
+    			
+    			if fp.find('_UNPACK_') < 0:
+    				media.extend(glob.glob(fp))
     	
     	return media   			  
 
