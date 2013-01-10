@@ -35,7 +35,7 @@ class hbHandle(object):
     		if not DebugMode:
     			return False
     		else:
-    			Notify('No files found',"HandleBar")
+    			return True
     			
     	else:
     		newFilepath = os.path.splitext(files[0])[0] + '.m4v'
