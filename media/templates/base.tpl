@@ -43,7 +43,13 @@
           <a class="brand" href="#">{{appName}}</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
+              <li class="active"><a href="/">Home</a></li>
+              <li><a href="/log">Logging</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+          <div class="nav-collapse collapse pull-right">
+            <ul class="nav">
+              <li id="hb-status"><a>-</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -60,18 +66,23 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="/media/js/jquery.js"></script>
-    <script src="/media/js/bootstrap-transition.js"></script>
-    <script src="/media/js/bootstrap-alert.js"></script>
-    <script src="/media/js/bootstrap-modal.js"></script>
-    <script src="/media/js/bootstrap-dropdown.js"></script>
-    <script src="/media/js/bootstrap-scrollspy.js"></script>
-    <script src="/media/js/bootstrap-tab.js"></script>
-    <script src="/media/js/bootstrap-tooltip.js"></script>
-    <script src="/media/js/bootstrap-popover.js"></script>
-    <script src="/media/js/bootstrap-button.js"></script>
-    <script src="/media/js/bootstrap-collapse.js"></script>
-    <script src="/media/js/bootstrap-carousel.js"></script>
-    <script src="/media/js/bootstrap-typeahead.js"></script>
-
+    <script src="/media/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+       
+       function getProgress() {
+       		$.get('/progress', function(r) {
+            	
+            	if(r != 'none')
+            		$('#hb-status a').html(r);
+            	else
+            		$('#hb-status a').html('nothing is converting');
+             });
+       }
+          	
+       $(function(){
+	       getProgress();
+	       setInterval('getProgress()',1000);
+       });        	
+       </script>
   </body>
 </html>

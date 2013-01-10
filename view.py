@@ -29,10 +29,35 @@ def clearDb():
 		
 	redirect("/")
 
+@app.route('/log')
+@view('log')
+def log(appName="HandleBar"):
+	bottle.TEMPLATES.clear()
+	
+	data_file = open('/tmp/handleBarError.log', 'r')
+	log = data_file.readlines()[-200:]  
+    	
+	return dict(appName=appName, outLog=log)
+	
+@app.route('/progress')
+def progress():
+	
+	hb = os.system('ps ax | grep -v grep | grep HandBrakeCLI > /dev/null');
+	
+	if hb == 0:
+		with open("/tmp/handleBarEncode.status") as f:
+		    line = f.readline()
+		
+		log = line.rsplit('\r')[-1]
+		   	
+		return log
+	else:
+		return "none"
+	
 @app.route('/media/<filepath:path>')
 def static(filepath):
 	return static_file(filepath, root=projectDir + '/media/')
 
 host = socket.gethostbyname(socket.gethostname())
 
-run(app, host=host, port=8082)
+run(app, host=host, port=8082, reloader=True)

@@ -58,7 +58,7 @@ class hbHandle(object):
     		
     		Notify('File: ' + oldFilename, 'HandleBar: Start converting ' + type)
     		
-    		os.system('nice -n 20 ' + HandbrakeCLIPath + ' -i "' + oldFilepath + '" -o "' + newFilepath + '" --large-file --preset "' + HandBrakePreset + '" --native-language "' + HandBrakeLanguage + '" --native-dub')    
+    		os.system('nice -n 20 ' + HandbrakeCLIPath + ' -i "' + oldFilepath + '" -o "' + newFilepath + '" --large-file --preset "' + HandBrakePreset + '" --native-language "' + HandBrakeLanguage + '" --native-dub 1> /tmp/handleBarEncode.status')    
     		
     		try:
     			with open(newFilepath) as f: pass
@@ -345,7 +345,7 @@ class ConvertDaemon(Daemon):
         	 
 if __name__ == "__main__":
 
-	daemon = ConvertDaemon('/tmp/convert-daemon.pid', '/dev/null', '/tmp/handleBarOut.log', '/tmp/handleBarError.log')
+	daemon = ConvertDaemon('/tmp/convert-daemon.pid', '/dev/null', '/dev/null', '/tmp/handleBarError.log')
 	
 	if len(sys.argv) == 2:
 		if 'start' == sys.argv[1]:
