@@ -341,12 +341,13 @@ class ConvertDaemon(Daemon):
 			"""
 			log.lg.info("Run forest, run")
 			"""
+			print "----> " + os.system('ps ax | grep -v grep | grep HandBrakeCLI > /dev/null');
 			time.sleep(5)
 			hb.check()
         	 
 if __name__ == "__main__":
 
-	daemon = ConvertDaemon('/tmp/convert-daemon.pid', '/dev/null', '/tmp/dOut.log', '/tmp/dErr.log')
+	daemon = ConvertDaemon('/tmp/convert-daemon.pid', '/dev/null', '/tmp/dOut.log')
 	
 	if len(sys.argv) == 2:
 		if 'start' == sys.argv[1]:
