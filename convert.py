@@ -34,9 +34,7 @@ class hbHandle(object):
     		
     		if not DebugMode:
     			return False
-    		else:
-    			return False
-    			
+    		    			
     	else:
     		newFilepath = os.path.splitext(files[0])[0] + '.m4v'
     		oldFilepath = files[0]
