@@ -32,9 +32,7 @@ class hbHandle(object):
     	
     	if not files:
     		
-    		if not DebugMode:
-    			return False
-    			
+    		print "No files found"	
     		    			
     	else:
     		newFilepath = os.path.splitext(files[0])[0] + '.m4v'
@@ -341,7 +339,7 @@ class ConvertDaemon(Daemon):
 			"""
 			log.lg.info("Run forest, run")
 			"""
-			print "----> " + str(os.system('ps ax | grep -v grep | grep HandBrakeCLI > /dev/null'));
+
 			time.sleep(5)
 			hb.check()
         	 
