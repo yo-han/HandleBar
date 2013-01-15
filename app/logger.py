@@ -6,7 +6,7 @@ class Logger(object):
 		 
 		 self.lg = logging.getLogger(app)
 		 
-		 logging.basicConfig(filename='/tmp/' + app + '.log',
+		 logging.basicConfig(filename='/tmp/handleBarError.log',
                             filemode='a',
                             format='%(asctime)s %(levelname)s %(message)s',
                             datefmt='%H:%M:%S',

@@ -258,12 +258,12 @@ class metadata:
             	Notify('Movie: ' + data.movieName, 'HandleBar: Set metadata')
 				
             	#os.system(self.AtomicParsleyPath + ' ' + self.filePath + ' --overWrite ' + artwork + ' --title "' + data.movieName + '" --artist "' + data.movieDirector +  '" --genre "' + data.movieGenre + '" --year ' + data.movieReleased + ' --description "' + data.movieDescription + '" --advisory "' + data.movieRating + '" --stik "Short Film" --comment "Mustacherioused"' + hd)
-            	subprocess.call([self.AtomicParsleyPath, self.filePath, '--artwork','REMOVE_ALL']);
+            	#subprocess.call([self.AtomicParsleyPath, self.filePath, '--artwork','REMOVE_ALL']);
             	
             	alist = [self.AtomicParsleyPath, self.filePath, '--overWrite','--title',data.movieName,'--artist',data.movieDirector,'--genre',data.movieGenre,'--year',data.movieReleased,'--description',data.movieDescription,'--advisory',data.movieRating,'--stik','Short Film','--comment','Mustacherioused']
             	arguments = alist + artwork + hd
 				
-            	subprocess.call(arguments, shell = False)
+            	subprocess.call(arguments, shell = False, stdout = open( '/tmp/atomicParsley.log', 'w'), stderr = open( '/tmp/atomicParsley.log', 'w'))
 				
             	filesTable.movie(self.fileId, data.movieName, os.path.basename(image), data.movieDirector, data.movieGenre, data.movieReleased, data.movieDescription, data.movieRating, data.imdbId, hd)
 				
@@ -297,7 +297,7 @@ class metadata:
             	alist = [self.AtomicParsleyPath, self.filePath, '--overWrite','--TVShowName',title,'--TVSeasonNum',str(data.seriesSeason),'--TVEpisodeNum',str(data.seriesEpisode),'--TVNetwork',str(data.seriesNetwork),'--title',data.seriesEpisodeName,'--description',data.seriesDescription,'--advisory',data.seriesRating,'--year',data.seriesAirDate,'--genre',data.seriesGenre,'--track',str(data.seriesEpisode),'--disk',str(data.seriesSeason),'--stik','TV Show','--comment','Mustacherioused']
             	arguments = alist + artwork + hd
 				
-            	subprocess.call(arguments, shell = False)
+            	subprocess.call(arguments, shell = False, stdout = open( '/tmp/atomicParsley.log', 'w'), stderr = open( '/tmp/atomicParsley.log', 'w'))
 				
             	filesTable.episode(self.fileId, title, os.path.basename(image), data.seriesSeason, data.seriesEpisode, data.seriesNetwork, data.seriesEpisodeName, data.seriesDescription, data.seriesRating, data.seriesAirDate, data.seriesGenre, hd)
 				
