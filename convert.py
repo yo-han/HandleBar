@@ -347,7 +347,7 @@ class ConvertDaemon(Daemon):
         	 
 if __name__ == "__main__":
 
-	daemon = ConvertDaemon('/tmp/convert-daemon.pid', '/dev/null', '/dev/null', '/tmp/handleBarError.log')
+	daemon = ConvertDaemon('/tmp/convert-daemon.pid', '/dev/null', '/tmp/handleBarOut.log', '/tmp/handleBarError.log')
 	
 	if len(sys.argv) == 2:
 		if 'start' == sys.argv[1]:
