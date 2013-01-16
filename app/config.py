@@ -1,7 +1,7 @@
 import ConfigParser, os
 
 path = os.path.abspath(os.path.dirname(__file__)) + "/../"
-
+		
 """ App support path """
 try:
 	pf = file(path + "configPath",'r')
@@ -38,6 +38,7 @@ NotificationOn  = Config.getboolean("HandleBarConfig", "NotificationOn")
 HandbrakeCLIPath = path + Config.get("HandleBarConfig","HandbrakeCLIPath")
 DebugRemovePath = Config.get("HandleBarConfig","DebugRemovePath")
 DebugFailedPath = Config.get("HandleBarConfig","DebugFailedPath")
+ReadyPath = Config.get("HandleBarConfig","ReadyPath")
 MediaPathsString = Config.get("HandleBarConfig","MediaPaths")
 HandleBarConfigPath = configPath;
 
