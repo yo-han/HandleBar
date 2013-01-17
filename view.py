@@ -29,6 +29,30 @@ def clearDb():
 		
 	redirect("/")
 
+@app.route('/retry')
+def retry():
+	
+	media = []
+	
+	for root, dirs, files in os.walk(projectDir + DebugFailedPath):
+		for files in ['*.m4v']:
+			fp = root + '/' + files
+			media.extend(glob.glob(fp))
+			
+	for path in media:
+		newFilename = os.path.basename(fp)
+		
+		md = metadata(path, 0)
+		result = md.parseFile()
+		
+		if result != True:
+			os.rename(path, HandleBarConfigPath + DebugFailedPath + '/' + newFilename)
+			return False
+		
+		moveToItunes(md.filePath)
+	
+	redirect("/failed")
+	
 @app.route('/log')
 @view('log')
 def log(appName="HandleBar"):
@@ -38,7 +62,16 @@ def log(appName="HandleBar"):
 	log = data_file.readlines()[-200:]  
     	
 	return dict(appName=appName, outLog=log)
+
+@app.route('/failed')
+@view('failed')
+def log(appName="HandleBar"):
+	bottle.TEMPLATES.clear()
 	
+	list = os.listdir(projectDir + DebugFailedPath) 
+    	
+	return dict(appName=appName, failedFiles=list)
+		
 @app.route('/progress')
 def progress():
 	

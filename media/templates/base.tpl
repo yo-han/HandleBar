@@ -45,6 +45,7 @@
             <ul class="nav">
               <li class="active"><a href="/">Home</a></li>
               <li><a href="/log">Logging</a></li>
+              <li><a href="/failed">Failed</a></li>
             </ul>
           </div><!--/.nav-collapse -->
           <div class="nav-collapse collapse pull-right">

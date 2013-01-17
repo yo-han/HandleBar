@@ -78,20 +78,8 @@ class hbHandle(object):
     			os.rename(convertedPath, HandleBarConfigPath + DebugFailedPath + '/' + newFilename)
     			return False
     		
-    		Notify('Copy to iTunes', 'HandleBar')
+    		moveToItunes(md.filePath)
     		    		
-    		#os.system("osascript -e 'tell application \"iTunes\"  to add POSIX file \"" + md.filePath + "\"'")
-    		os.system("""osascript << EOF
-						tell application "iTunes"
-						    launch
-						    with timeout of 30000 seconds
-						        add ("%s" as POSIX file)
-						    end timeout
-						end tell
-						EOF""" % md.filePath)
-									
-    		os.remove(md.filePath)
-    		
     	return True
     		
     def findRawMedia(self, path):	
