@@ -46,8 +46,7 @@ def retry():
 		result = md.parseFile()
 		
 		if result != True:
-			os.rename(path, HandleBarConfigPath + DebugFailedPath + '/' + newFilename)
-			return False
+			pass
 		
 		moveToItunes(md.filePath)
 	
