@@ -15,13 +15,14 @@ class movie:
 		self.movieGenre = None
 		self.imdbId = None
 		self.foundMovie = False
+		self.searchFailed = False
 		
 		self._setTitle(title)
 		self._parseData()
 					
 	def _parseData(self):
 		
-		#try:
+		try:
 			results = tmdb.search(self.getTitle())
 			
 			if not results:
@@ -42,9 +43,9 @@ class movie:
 						
 			return self
 			
-		#except:
-		#	print "Unexpected error:", sys.exc_info()[0]
-		#	return False
+		except:
+			print "Unexpected error:", sys.exc_info()[0]
+			self.searchFailed = True
 	
 	def _setTitle(self, title):
 		

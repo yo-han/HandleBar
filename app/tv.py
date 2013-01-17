@@ -15,6 +15,7 @@ class tvEpisode:
 		self.seriesNetwork = None
 		self.seriesGenre = None
 		self.seriesImage = None
+		self.foundSeries = False
 		
 		self._setTitle(serieData['series'])
 		
@@ -23,29 +24,36 @@ class tvEpisode:
 			self._setSeason(serieData['season'])
 			self._setEpisode(serieData['episodeNumber'])
 
-		self.parseData()
+		self._parseData()
 							
-	def parseData(self):
+	def _parseData(self):
 
 		if self.seriesSeason is None:
-			return self
+			return False
 
-		tvdb = tvdb_api.Tvdb(banners=True)
-		
-		title = self.getTitle()
-		series = tvdb[title]
-		season = int(self.getSeason())
-		episode = int(self.getEpisode())
-
-		self._setArtwork(series['_banners']['season']['season'], season, tvdb)
-		self._setTitle(series['seriesname'])
-		self._setEpisodeName(series[season][episode]['episodename'])
-		self._setEpisodeDescription(series[season][episode]['overview'])
-		self._setAirDate(series[season][episode]['firstaired'])
-		self._setNetwork(series['network'])
-		self._setGenre(series['genre'])
-		self._setRating(series['contentrating'])		
-		
+		try:
+			tvdb = tvdb_api.Tvdb(banners=True)
+			
+			title = self.getTitle()
+			series = tvdb[title]
+			season = int(self.getSeason())
+			episode = int(self.getEpisode())
+	
+			self._setArtwork(series['_banners']['season']['season'], season, tvdb)
+			self._setTitle(series['seriesname'])
+			self._setEpisodeName(series[season][episode]['episodename'])
+			self._setEpisodeDescription(series[season][episode]['overview'])
+			self._setAirDate(series[season][episode]['firstaired'])
+			self._setNetwork(series['network'])
+			self._setGenre(series['genre'])
+			self._setRating(series['contentrating'])		
+			
+			self.foundSeries = True
+			
+		except:
+			print "Unexpected error:", sys.exc_info()[0]
+			return False
+			
 	def _setTitle(self, title):
 		
 		if title is not None:

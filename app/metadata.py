@@ -66,7 +66,11 @@ class metadata:
             	print "TV Show"
 				
             	episode = tvEpisode(guess)
-				
+
+            	if episode.foundSeries == False:
+            		Notify('No data found for this episode', 'HandleBar: Error')
+            		return False
+            		
             	artwork = []
             	title = episode.getTitleClean()
 
