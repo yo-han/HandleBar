@@ -77,7 +77,7 @@ class tvEpisode:
 	def _setEpisodeDescription(self, episodeDescription):
 		
 		if episodeDescription is not None:
-			self.seriesDescription = str(episodeDescription).encode('utf-8').strip()
+			self.seriesDescription = episodeDescription.encode('utf-8').strip()
 			
 	def _setAirDate(self, airdate):
 		
