@@ -46,7 +46,7 @@ def retry():
 		result = md.parseFile()
 		
 		if result != True:
-			pass
+			return False
 		
 		moveToItunes(md.filePath)
 	
