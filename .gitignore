@@ -6,3 +6,4 @@
 *.pyc
 media/images/*
 media/failed/*
+media/converted/*.m4v
