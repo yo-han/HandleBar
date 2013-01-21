@@ -1,4 +1,4 @@
-import os, sys, glob, time, guessit
+import os, sys, glob, time, guessit, subliminal
 
 from lib import *
 from app import *
@@ -21,7 +21,7 @@ class metadata:
         def parseFile(self):
 	   
         	guess = guessit.guess_video_info(self.filePath, info = ['filename'])
-        	
+        	print subliminal.list_subtitles('The.Big.Bang.Theory.S05E18.HDTV.x264-LOL.mp4', ['en'])
         	return self.setMetaData(guess)
         
         def setMetaData(self, guess):
@@ -30,7 +30,7 @@ class metadata:
             	hdb = "1"
             else:
             	hdb = "0"
-   	        	       	
+   	          	               	
             if guess['type'] == "movie":
 				
             	print "Movie"
@@ -45,7 +45,19 @@ class metadata:
 					
             	Notify('Movie: ' + mvd.getName(), 'HandleBar: Set metadata')
 
-            	tags = ["{Artwork:" + image + "}", "{HD Video:" + hdb + "}", "{Name:" + mvd.getName() + "}", "{Artist:" + mvd.getDirector() + "}", "{Genre:" + mvd.getGenre() + "}", "{Release Date:" + mvd.getReleased() + "}", "{Description:" + mvd.getDescription() + "}", "{Long Description:" + mvd.getDescription() + "}", "{Rating:" + mvd.getRating() + "}", "{Media Kind:Movie}","{Comment:Mustacherioused}"]           	      	
+            	tags = ["{Artwork:" + image + "}", 
+            			"{HD Video:" + hdb + "}", 
+            			"{Name:" + mvd.getName() + "}", 
+            			"{Director:" + mvd.getDirector() + "}", 
+            			"{Producer:" + mvd.getProducer() + "}", 
+            			"{Cast:" + mvd.getCast() + "}", 
+            			"{Genre:" + mvd.getGenre() + "}", 
+            			"{Release Date:" + mvd.getReleased() + "}", 
+            			"{Description:" + mvd.getDescription() + "}", 
+            			"{Long Description:" + mvd.getDescription() + "}", 
+            			"{Rating:" + mvd.getRating() + "}", 
+            			"{Media Kind:Movie}",
+            			"{Comment:Mustacherioused}"]           	      	
             	arguments = [self.SublerCLIPath, "-optimize", "-dest", self.filePath, '-metadata', "".join(tags)]
 				
             	logProc = open("/tmp/SublrCLI.log", "a")
@@ -69,7 +81,7 @@ class metadata:
             	image = self.downloadImage(episode.getImage())    
            					
             	Notify('TV Show: ' + title, 'HandleBar: Set metadata')
-            	
+
             	tags = ["{Artwork:" + image + "}", 
             			"{HD Video:" + hdb + "}", 
             			"{TV Show:" + title + "}", 
@@ -82,6 +94,7 @@ class metadata:
             			"{Description:" + episode.getDescription() + "}", 
             			"{Long Description:" + episode.getDescription() + "}", 
             			"{Rating:" + episode.getRating() + "}",
+            			"{Director:" + episode.getCast() + "}",
             			"{Media Kind:TV Show}",
             			"{Comment:Mustacherioused}"]   
             			        	      	

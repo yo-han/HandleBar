@@ -12,6 +12,8 @@ class movie:
 		self.movieRating = None
 		self.movieReleased = None
 		self.movieDirector = None
+		self.movieProducer = None
+		self.movieCast = None
 		self.movieGenre = None
 		self.imdbId = None
 		self.foundMovie = False
@@ -31,7 +33,7 @@ class movie:
 			self.foundMovie = True
 			
 			movie = tmdb.getMovieInfo(results[0]['id'])
-						
+	
 			self._setImage(movie['images'][0])
 			self._setName(movie['name'])
 			self._setDescription(movie['overview'])
@@ -40,6 +42,8 @@ class movie:
 			self._setDirector(movie['cast']['director'][0]['name'])
 			self._setGenre(movie['categories']['genre'].keys()[0])
 			self._setImdb(movie['imdb_id'])
+			self._setProducer(movie['cast']['producer'][0]['name'])
+			self._setCast(movie['cast']['actor'])
 						
 			return self
 			
@@ -82,6 +86,11 @@ class movie:
 		if director is not None:
 			self.movieDirector = str(director).encode('utf-8').strip()
 			
+	def _setProducer(self, producer):
+		
+		if producer is not None:
+			self.movieProducer = str(producer).encode('utf-8').strip()
+			
 	def _setGenre(self, genre):
 		
 		if genre is not None:
@@ -92,6 +101,15 @@ class movie:
 		if imdbId is not None:
 			self.imdbId = str(imdbId).encode('utf-8').strip()
 	
+	def _setCast(self, cast):
+		
+		actors = []
+		for actor in cast:
+			
+			actors.extend("," + actor['name'])
+		
+		self.movieCast = "".join(actors)[1:]
+				
 	def _getImage(self, images):
 		
 		for key in images.keys():
@@ -149,6 +167,20 @@ class movie:
 		
 		if self.movieDirector is not None:
 			return self.movieDirector
+		else:
+			return ""
+			
+	def getProducer(self):				
+		
+		if self.movieProducer is not None:
+			return self.movieProducer
+		else:
+			return ""
+			
+	def getCast(self):				
+		
+		if self.movieCast is not None:
+			return self.movieCast
 		else:
 			return ""
 			
