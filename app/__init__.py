@@ -20,6 +20,26 @@ def moveToItunes(file):
 							
 	os.remove(file)
 	
+def parseFailedFiles():
+	
+	media = []
+	
+	for root, dirs, files in os.walk(projectDir + DebugFailedPath):
+		for files in ['*.m4v']:
+			fp = root + '/' + files
+			media.extend(glob.glob(fp))
+			
+	for path in media:
+		newFilename = os.path.basename(fp)
+		
+		md = metadata(path, 0)
+		result = md.parseFile()
+		
+		if result != True:
+			return False
+		
+		moveToItunes(md.filePath)
+		
 """ Logger (not in use, but can be used for debugging purposes """
 log = Logger('HandleBar')
 

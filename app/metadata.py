@@ -16,6 +16,7 @@ class metadata:
         	self.filePath = file
         	self.fileId = fileId
         	self.AtomicParsleyPath = projectDir + "/bin/AtomicParsley"
+        	self.SublerCLIPath = projectDir + "/bin/SublerCLI"
         	       	
         def parseFile(self):
 	   
@@ -24,11 +25,11 @@ class metadata:
         	return self.setMetaData(guess)
         
         def setMetaData(self, guess):
-               	        	       	
+            
             if "screenSize" in guess and (guess['screenSize'] == '720p' or guess['screenSize'] == '1080p'):
-            	hd = ['--meta-uuid','hdvd','true']
+            	hdb = "1"
             else:
-            	hd = []
+            	hdb = "0"
    	        	       	
             if guess['type'] == "movie":
 				
@@ -40,27 +41,20 @@ class metadata:
             		Notify('No data found for this movie', 'HandleBar: Error')
             		return False
 					
-            	artwork = []
-				
             	image = self.downloadImage(mvd.getImage())     
-            	if image is not "":
-            		artwork = ['--artwork',image]
 					
             	Notify('Movie: ' + mvd.getName(), 'HandleBar: Set metadata')
+
+            	tags = ["{Artwork:" + image + "}", "{HD Video:" + hdb + "}", "{Name:" + mvd.getName() + "}", "{Artist:" + mvd.getDirector() + "}", "{Genre:" + mvd.getGenre() + "}", "{Release Date:" + mvd.getReleased() + "}", "{Description:" + mvd.getDescription() + "}", "{Long Description:" + mvd.getDescription() + "}", "{Rating:" + mvd.getRating() + "}", "{Media Kind:Movie}","{Comment:Mustacherioused}"]           	      	
+            	arguments = [self.SublerCLIPath, "-optimize", "-dest", self.filePath, '-metadata', "".join(tags)]
 				
-            	#subprocess.call([self.AtomicParsleyPath, self.filePath, '--artwork','REMOVE_ALL']);
-            	#os.system(self.AtomicParsleyPath + ' ' + self.filePath + ' --overWrite  --title "' + data.movieName + '" --artist "' + data.movieDirector +  '" --genre "' + data.movieGenre + '" --year ' + data.movieReleased + ' --description "' + data.movieDescription + '" --advisory "' + data.movieRating + '" --stik "Short Film" --comment "Mustacherioused"')
-            	           	      	
-            	alist = [self.AtomicParsleyPath, self.filePath, '--overWrite','--title',mvd.getName(),'--artist',mvd.getDirector(),'--genre',mvd.getGenre(),'--year',mvd.getReleased(),'--description',mvd.getDescription(),'--advisory',mvd.getRating(),'--stik','Short Film','--comment','Mustacherioused']
-            	arguments = alist + artwork + hd
+            	logProc = open("/tmp/SublrCLI.log", "a")
+            	subprocess.Popen(arguments, shell=False, stdout=logProc, stderr=subprocess.STDOUT, preexec_fn = self.preexec).communicate()
+
+            	filesTable.movie(self.fileId, mvd.getName(), os.path.basename(image), mvd.getDirector(), mvd.getGenre(), mvd.getReleased(), mvd.getDescription(), mvd.getRating(), mvd.getImdbid(), hdb)
 				
-            	logATP = open("/tmp/atomicParsley.log", "a")
-            	subprocess.call(arguments, shell=False, stdout=logATP, stderr=subprocess.STDOUT)
-				
-            	filesTable.movie(self.fileId, mvd.getName(), os.path.basename(image), mvd.getDirector(), mvd.getGenre(), mvd.getReleased(), mvd.getDescription(), mvd.getRating(), mvd.getImdbid(), hd)
-				
-            	return True
-							
+            	return True      	
+            	
             elif guess['type'] == "episode":
 				
             	print "TV Show"
@@ -70,30 +64,42 @@ class metadata:
             	if episode.foundSeries == False:
             		Notify('No data found for this episode', 'HandleBar: Error')
             		return False
-            		
-            	artwork = []
-            	title = episode.getTitleClean()
 
+            	title = episode.getTitleClean()
             	image = self.downloadImage(episode.getImage())    
-            	if image is not "":
-            		artwork = ['--artwork',image]
            					
             	Notify('TV Show: ' + title, 'HandleBar: Set metadata')
+            	
+            	tags = ["{Artwork:" + image + "}", 
+            			"{HD Video:" + hdb + "}", 
+            			"{TV Show:" + title + "}", 
+            			"{TV Episode #:" + episode.getEpisode() + "}", 
+            			"{TV Season:" + episode.getSeason() + "}", 
+            			"{TV Network:" + episode.getNetwork() + "}", 
+            			"{Name:" + episode.getEpisodeName() + "}", 
+            			"{Genre:" + episode.getGenre() + "}", 
+            			"{Release Date:" + episode.getAirdate() + "}", 
+            			"{Description:" + episode.getDescription() + "}", 
+            			"{Long Description:" + episode.getDescription() + "}", 
+            			"{Rating:" + episode.getRating() + "}",
+            			"{Media Kind:TV Show}",
+            			"{Comment:Mustacherioused}"]   
+            			        	      	
+            	arguments = [self.SublerCLIPath, "-optimize", "-dest", self.filePath, '-metadata', "".join(tags)]
 				
-            	alist = [self.AtomicParsleyPath, self.filePath, '--overWrite','--TVShowName',title,'--TVSeasonNum',episode.getSeason(),'--TVEpisodeNum',episode.getEpisode(),'--TVNetwork',episode.getNetwork(),'--title',episode.getEpisodeName(),'--description',episode.getDescription(),'--advisory',episode.getRating(),'--year',episode.getAirdate(),'--genre',episode.getGenre(),'--track',episode.getEpisode(),'--disk',episode.getSeason(),'--stik','TV Show','--comment','Mustacherioused']
-            	arguments = alist + artwork + hd
+            	logProc = open("/tmp/SublrCLI.log", "a")
+            	subprocess.Popen(arguments, shell=False, stdout=logProc, stderr=subprocess.STDOUT, preexec_fn = self.preexec).communicate()
 				
-            	logATP = open("/tmp/atomicParsley.log", "a")
-            	subprocess.call(arguments, shell=False, stdout=logATP, stderr=subprocess.STDOUT)
-				
-            	filesTable.episode(self.fileId, title, os.path.basename(image), episode.getSeason(), episode.getEpisode(), episode.getNetwork(), episode.getEpisodeName(), episode.getDescription(), episode.getRating(), episode.getAirdate(), episode.getGenre(), hd)
+            	filesTable.episode(self.fileId, title, os.path.basename(image), episode.getSeason(), episode.getEpisode(), episode.getNetwork(), episode.getEpisodeName(), episode.getDescription(), episode.getRating(), episode.getAirdate(), episode.getGenre(), hdb)
 				
             	return True
             else:
             	print "Unknown type"
             	return False										
 			
-        	
+        def preexec(self):
+	    	os.setpgrp()
+	    		
         def downloadImage(self, url):
         	
         	path = projectDir + 'media/images/' + os.path.basename(url)
@@ -115,4 +121,4 @@ class metadata:
    	        if downloaded == True:
 		        return path
 
-	    	return ""
+	    	return ""	    

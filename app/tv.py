@@ -1,6 +1,8 @@
 from lib import *
 from app import *
 
+import pprint
+
 class tvEpisode:
 	
 	def __init__(self, serieData):
@@ -32,13 +34,15 @@ class tvEpisode:
 			return False
 
 		try:
-			tvdb = tvdb_api.Tvdb(banners=True)
+			tvdb = tvdb_api.Tvdb(banners=True,actors = True)
 			
 			title = self.getTitle()
 			series = tvdb[title]
 			season = int(self.getSeason())
 			episode = int(self.getEpisode())
-	
+			
+			#print series.data.keys()
+			
 			self._setArtwork(series['_banners']['season']['season'], season, tvdb)
 			self._setTitle(series['seriesname'])
 			self._setEpisodeName(series[season][episode]['episodename'])
@@ -50,6 +54,10 @@ class tvEpisode:
 			
 			self.foundSeries = True
 			
+		except UnicodeEncodeError:
+			import sys, pdb
+			pdb.post_mortem(sys.exc_info()[2])	
+		
 		except:
 			print "Unexpected error:", sys.exc_info()[0]
 			return False
@@ -57,6 +65,8 @@ class tvEpisode:
 	def _setTitle(self, title):
 		
 		if title is not None:
+		
+			title = self._optimizeTitleForSearch(title)
 			self.seriesTitle = str(title).encode('utf-8').strip()
 			
 	def _setSeason(self, season):
@@ -75,9 +85,9 @@ class tvEpisode:
 			self.seriesEpisodeName = str(episodeName).encode('utf-8').strip()
 			
 	def _setEpisodeDescription(self, episodeDescription):
-		
+
 		if episodeDescription is not None:
-			self.seriesDescription = episodeDescription.encode('utf-8').strip()
+			self.seriesDescription = episodeDescription.strip()
 			
 	def _setAirDate(self, airdate):
 		
@@ -118,8 +128,10 @@ class tvEpisode:
 	def getTitleClean(self):
 	
 		_title = self.getTitle()
-		if _title.find('revolution.') != -1:
+		if _title.find('Revolution.') != -1:
 			title = _title[:-5]
+		elif _title.find('Archer') != -1:
+			title = _title[0:6]
 		else:
 			title = _title
 			
@@ -179,3 +191,14 @@ class tvEpisode:
 			return self.seriesAirDate
 		else:
 			return ""
+			
+	def _optimizeTitleForSearch(self, title):
+	
+		_title = title
+		if _title.find('Archer') != -1:
+			title = title + " (2009)"
+		else:
+			title = _title
+			
+		return title
+		

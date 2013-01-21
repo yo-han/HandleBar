@@ -82,7 +82,7 @@
           	
        $(function(){
 	       getProgress();
-	       setInterval('getProgress()',1000);
+	       //setInterval('getProgress()',1000);
        });        	
        </script>
   </body>
