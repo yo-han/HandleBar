@@ -1,4 +1,4 @@
-import os, sys, glob, time, guessit, subliminal
+import os, sys, glob, time, guessit
 
 from lib import *
 from app import *
@@ -6,6 +6,7 @@ from app import *
 projectDir = HandleBarConfigPath
 
 class metadata:
+
         """
         A generic daemon class.
        
@@ -21,7 +22,7 @@ class metadata:
         def parseFile(self):
 	   
         	guess = guessit.guess_video_info(self.filePath, info = ['filename'])
-        	print subliminal.list_subtitles('The.Big.Bang.Theory.S05E18.HDTV.x264-LOL.mp4', ['en'])
+        	   		
         	return self.setMetaData(guess)
         
         def setMetaData(self, guess):
@@ -57,7 +58,8 @@ class metadata:
             			"{Long Description:" + mvd.getDescription() + "}", 
             			"{Rating:" + mvd.getRating() + "}", 
             			"{Media Kind:Movie}",
-            			"{Comment:Mustacherioused}"]           	      	
+            			"{Comment:Mustacherioused}"]   
+            			        	      	
             	arguments = [self.SublerCLIPath, "-optimize", "-dest", self.filePath, '-metadata', "".join(tags)]
 				
             	logProc = open("/tmp/SublrCLI.log", "a")
