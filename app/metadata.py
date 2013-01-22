@@ -18,6 +18,7 @@ class metadata:
         	self.fileId = fileId
         	self.AtomicParsleyPath = projectDir + "/bin/AtomicParsley"
         	self.SublerCLIPath = projectDir + "/bin/SublerCLI"
+        	self.subtitlePath = os.path.abspath(projectDir + SubtitlePath + "/" + os.path.basename(self.filePath)).replace('.m4v','.srt')
         	       	
         def parseFile(self):
 	   
@@ -31,6 +32,11 @@ class metadata:
             	hdb = "1"
             else:
             	hdb = "0"
+            	
+            if os.path.exists(self.subtitlePath):
+            	subtitles = self.subtitlePath
+            else:
+            	subtitles = ""
    	          	               	
             if guess['type'] == "movie":
 				
@@ -59,8 +65,10 @@ class metadata:
             			"{Rating:" + mvd.getRating() + "}", 
             			"{Media Kind:Movie}",
             			"{Comment:Mustacherioused}"]   
+            			
+            	
             			        	      	
-            	arguments = [self.SublerCLIPath, "-optimize", "-dest", self.filePath, '-metadata', "".join(tags)]
+            	arguments = [self.SublerCLIPath, "-optimize", "-dest", self.filePath, "-source", subtitles, "-metadata", "".join(tags)]
 				
             	logProc = open("/tmp/SublrCLI.log", "a")
             	subprocess.Popen(arguments, shell=False, stdout=logProc, stderr=subprocess.STDOUT, preexec_fn = self.preexec).communicate()
@@ -100,7 +108,7 @@ class metadata:
             			"{Media Kind:TV Show}",
             			"{Comment:Mustacherioused}"]   
             			        	      	
-            	arguments = [self.SublerCLIPath, "-optimize", "-dest", self.filePath, '-metadata', "".join(tags)]
+            	arguments = [self.SublerCLIPath, "-optimize", "-dest", self.filePath, "-source", subtitles, "-metadata", "".join(tags)]
 				
             	logProc = open("/tmp/SublrCLI.log", "a")
             	subprocess.Popen(arguments, shell=False, stdout=logProc, stderr=subprocess.STDOUT, preexec_fn = self.preexec).communicate()

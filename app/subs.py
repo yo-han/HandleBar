@@ -1,5 +1,9 @@
 import os, subliminal
 
+from app import *
+
+projectDir = HandleBarConfigPath
+
 class subs:
         
         def __init__(self, file):
@@ -8,9 +12,8 @@ class subs:
         	       	
         def downloadSubtitles(self):
 
-	        cwd = os.path.abspath(os.path.dirname(self.filePath)) + '/../subtitles'
+	        cwd = os.path.abspath(projectDir + SubtitlePath)
 	        os.chdir(cwd)	        	        
-	        #os.rename(self.filePath, cwd + '1/'+ os.path.basename(self.filePath))
-	        
+	        	        
 	        sub = subliminal.download_subtitles(os.path.basename(self.filePath), ['nl'], cache_dir="/tmp")
-	        print sub       	
+	        #print sub       	

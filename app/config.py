@@ -38,6 +38,7 @@ NotificationOn  = Config.getboolean("HandleBarConfig", "NotificationOn")
 HandbrakeCLIPath = path + Config.get("HandleBarConfig","HandbrakeCLIPath")
 DebugRemovePath = Config.get("HandleBarConfig","DebugRemovePath")
 DebugFailedPath = Config.get("HandleBarConfig","DebugFailedPath")
+SubtitlePath = Config.get("HandleBarConfig","SubtitlePath")
 ReadyPath = Config.get("HandleBarConfig","ReadyPath")
 MediaPathsString = Config.get("HandleBarConfig","MediaPaths")
 HandleBarConfigPath = configPath;
