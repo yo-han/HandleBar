@@ -18,7 +18,7 @@ def moveToItunes(file):
 				end tell
 				EOF""" % file)
 							
-	os.remove(file)
+	#os.remove(file)
 	
 def parseFailedFiles():
 	
@@ -30,8 +30,11 @@ def parseFailedFiles():
 			media.extend(glob.glob(fp))
 			
 	for path in media:
-		newFilename = os.path.basename(fp)
 		
+		""" SUBS """
+   		sub = subs(path)
+   		sub.downloadSubtitles()
+   		
 		md = metadata(path, 0)
 		result = md.parseFile()
 		
@@ -49,3 +52,4 @@ filesTable = Files()
 from tv import *
 from movie import *		
 from metadata import *
+from subs import *

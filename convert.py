@@ -34,14 +34,7 @@ class hbHandle(object):
     		type = guess['type']
     		   		
     		fileId = filesTable.new(type, oldFilename)
-    		
-    		""" Metadata testing """
-    		"""
-    		md = metadata(oldFilepath, fileId)
-    		result = md.parseFile()
-    		print result
-    		sys.exit(0)"""
-    	    		
+       	    		
     		if not fileId:
     			Notify('Insert of new file record failed', 'HandleBar: Error')
     			return False
@@ -65,6 +58,10 @@ class hbHandle(object):
     		else:
     			os.remove(oldFilepath)
     		
+    		""" SUBS """
+    		sub = subs(newFilepath)
+    		sub.downloadSubtitles()
+    		
     		Notify('File: ' + oldFilename, 'HandleBar: Parse metadata')
     		
     		convertedPath = HandleBarConfigPath + ReadyPath + '/' + newFilename
@@ -75,7 +72,8 @@ class hbHandle(object):
     		result = md.parseFile()
     		
     		if result != True:
-    			os.rename(convertedPath, HandleBarConfigPath + DebugFailedPath + '/' + newFilename)
+    			os.mkdir(HandleBarConfigPath + DebugFailedPath + '/video')
+    			os.rename(convertedPath, HandleBarConfigPath + DebugFailedPath + '/video/' + newFilename)
     			return False
     		
     		moveToItunes(md.filePath)

@@ -17,6 +17,7 @@ class tvEpisode:
 		self.seriesNetwork = None
 		self.seriesGenre = None
 		self.seriesImage = None
+		self.seriesCast = None
 		self.foundSeries = False
 		
 		self._setTitle(serieData['series'])
@@ -34,15 +35,13 @@ class tvEpisode:
 			return False
 
 		try:
-			tvdb = tvdb_api.Tvdb(banners=True,actors = True)
+			tvdb = tvdb_api.Tvdb(banners=True)
 			
 			title = self.getTitle()
 			series = tvdb[title]
 			season = int(self.getSeason())
 			episode = int(self.getEpisode())
-			
-			#print series.data.keys()
-			
+		
 			self._setArtwork(series['_banners']['season']['season'], season, tvdb)
 			self._setTitle(series['seriesname'])
 			self._setEpisodeName(series[season][episode]['episodename'])
@@ -51,12 +50,13 @@ class tvEpisode:
 			self._setNetwork(series['network'])
 			self._setGenre(series['genre'])
 			self._setRating(series['contentrating'])		
+			self._setCast(series['actors'])
 			
 			self.foundSeries = True
 			
-		except UnicodeEncodeError:
-			import sys, pdb
-			pdb.post_mortem(sys.exc_info()[2])	
+		#except UnicodeEncodeError:
+		#	import sys, pdb
+		#	pdb.post_mortem(sys.exc_info()[2])	
 		
 		except:
 			print "Unexpected error:", sys.exc_info()[0]
@@ -110,6 +110,11 @@ class tvEpisode:
 		if rating is not None:
 			self.seriesRating  = rating.encode('utf-8').strip()
 	
+	def _setCast(self, cast):
+		
+		if cast is not None:
+			self.seriesCast  = ",".join(cast.split('|'))
+			
 	def _setArtwork(self, banners, season, tvdb):
 
 		for s in banners:
@@ -189,6 +194,12 @@ class tvEpisode:
 	def getAirdate(self): 
 		if self.seriesAirDate is not None:
 			return self.seriesAirDate
+		else:
+			return ""
+			
+	def getCast(self): 
+		if self.seriesCast is not None:
+			return self.seriesCast
 		else:
 			return ""
 			

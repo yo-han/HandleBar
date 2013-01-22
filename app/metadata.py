@@ -6,6 +6,7 @@ from app import *
 projectDir = HandleBarConfigPath
 
 class metadata:
+
         """
         A generic daemon class.
        
@@ -17,11 +18,12 @@ class metadata:
         	self.fileId = fileId
         	self.AtomicParsleyPath = projectDir + "/bin/AtomicParsley"
         	self.SublerCLIPath = projectDir + "/bin/SublerCLI"
+        	self.subtitlePath = os.path.abspath(projectDir + SubtitlePath + "/" + os.path.basename(self.filePath)).replace('.m4v','.srt')
         	       	
         def parseFile(self):
 	   
         	guess = guessit.guess_video_info(self.filePath, info = ['filename'])
-        	
+        	   		
         	return self.setMetaData(guess)
         
         def setMetaData(self, guess):
@@ -30,7 +32,12 @@ class metadata:
             	hdb = "1"
             else:
             	hdb = "0"
-   	        	       	
+            	
+            if os.path.exists(self.subtitlePath):
+            	subtitles = self.subtitlePath
+            else:
+            	subtitles = ""
+   	          	               	
             if guess['type'] == "movie":
 				
             	print "Movie"
@@ -45,8 +52,23 @@ class metadata:
 					
             	Notify('Movie: ' + mvd.getName(), 'HandleBar: Set metadata')
 
-            	tags = ["{Artwork:" + image + "}", "{HD Video:" + hdb + "}", "{Name:" + mvd.getName() + "}", "{Artist:" + mvd.getDirector() + "}", "{Genre:" + mvd.getGenre() + "}", "{Release Date:" + mvd.getReleased() + "}", "{Description:" + mvd.getDescription() + "}", "{Long Description:" + mvd.getDescription() + "}", "{Rating:" + mvd.getRating() + "}", "{Media Kind:Movie}","{Comment:Mustacherioused}"]           	      	
-            	arguments = [self.SublerCLIPath, "-optimize", "-dest", self.filePath, '-metadata', "".join(tags)]
+            	tags = ["{Artwork:" + image + "}", 
+            			"{HD Video:" + hdb + "}", 
+            			"{Name:" + mvd.getName() + "}", 
+            			"{Director:" + mvd.getDirector() + "}", 
+            			"{Producer:" + mvd.getProducer() + "}", 
+            			"{Cast:" + mvd.getCast() + "}", 
+            			"{Genre:" + mvd.getGenre() + "}", 
+            			"{Release Date:" + mvd.getReleased() + "}", 
+            			"{Description:" + mvd.getDescription() + "}", 
+            			"{Long Description:" + mvd.getDescription() + "}", 
+            			"{Rating:" + mvd.getRating() + "}", 
+            			"{Media Kind:Movie}",
+            			"{Comment:Mustacherioused}"]   
+            			
+            	
+            			        	      	
+            	arguments = [self.SublerCLIPath, "-optimize", "-dest", self.filePath, "-source", subtitles, "-metadata", "".join(tags)]
 				
             	logProc = open("/tmp/SublrCLI.log", "a")
             	subprocess.Popen(arguments, shell=False, stdout=logProc, stderr=subprocess.STDOUT, preexec_fn = self.preexec).communicate()
@@ -69,7 +91,7 @@ class metadata:
             	image = self.downloadImage(episode.getImage())    
            					
             	Notify('TV Show: ' + title, 'HandleBar: Set metadata')
-            	
+
             	tags = ["{Artwork:" + image + "}", 
             			"{HD Video:" + hdb + "}", 
             			"{TV Show:" + title + "}", 
@@ -82,10 +104,11 @@ class metadata:
             			"{Description:" + episode.getDescription() + "}", 
             			"{Long Description:" + episode.getDescription() + "}", 
             			"{Rating:" + episode.getRating() + "}",
+            			"{Director:" + episode.getCast() + "}",
             			"{Media Kind:TV Show}",
             			"{Comment:Mustacherioused}"]   
             			        	      	
-            	arguments = [self.SublerCLIPath, "-optimize", "-dest", self.filePath, '-metadata', "".join(tags)]
+            	arguments = [self.SublerCLIPath, "-optimize", "-dest", self.filePath, "-source", subtitles, "-metadata", "".join(tags)]
 				
             	logProc = open("/tmp/SublrCLI.log", "a")
             	subprocess.Popen(arguments, shell=False, stdout=logProc, stderr=subprocess.STDOUT, preexec_fn = self.preexec).communicate()
