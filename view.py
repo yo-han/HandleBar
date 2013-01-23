@@ -51,7 +51,7 @@ def log(appName="HandleBar"):
 def log(appName="HandleBar"):
 	bottle.TEMPLATES.clear()
 	
-	list = os.listdir(projectDir + DebugFailedPath) 
+	list = os.listdir(projectDir + '/' + DebugFailedPath) 
     	
 	return dict(appName=appName, failedFiles=list)
 		
