@@ -19,12 +19,12 @@ class metadata:
         	self.AtomicParsleyPath = projectDir + "/bin/AtomicParsley"
         	self.SublerCLIPath = projectDir + "/bin/SublerCLI"
         	self.subtitlePath = os.path.abspath(projectDir + SubtitlePath + "/" + os.path.basename(self.filePath)).replace('.m4v','.srt')
+        	
+        	self.guess = guessit.guess_video_info(self.filePath, info = ['filename'])
         	       	
         def parseFile(self):
-	   
-        	guess = guessit.guess_video_info(self.filePath, info = ['filename'])
-        	   		
-        	return self.setMetaData(guess)
+	           	   		
+        	return self.setMetaData(self.guess)
         
         def setMetaData(self, guess):
             

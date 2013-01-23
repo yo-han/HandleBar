@@ -59,7 +59,7 @@ class hbHandle(object):
     			os.remove(oldFilepath)
     		
     		""" SUBS """
-    		sub = subs(newFilepath)
+    		sub = subs(newFilepath, type)
     		sub.downloadSubtitles()
     		
     		Notify('File: ' + oldFilename, 'HandleBar: Parse metadata')

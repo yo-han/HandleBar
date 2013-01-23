@@ -30,12 +30,13 @@ def parseFailedFiles():
 			media.extend(glob.glob(fp))
 			
 	for path in media:
+		  		
+		md = metadata(path, 0)
 		
 		""" SUBS """
-   		sub = subs(path)
+   		sub = subs(path, md.guess['type'])
    		sub.downloadSubtitles()
    		
-		md = metadata(path, 0)
 		result = md.parseFile()
 		
 		if result != True:
