@@ -13,13 +13,13 @@ class subs:
         	if type == "movie":
         		self.services = ['addic7ed', 'opensubtitles', 'subswiki', 'thesubdb']
         	else:
-        		self.services = ['bierdopje']
+        		self.services = ['bierdopje','opensubtitles']
         	
         	       	
         def downloadSubtitles(self):
 
 	        cwd = os.path.abspath(projectDir + SubtitlePath)
 	        os.chdir(cwd)	        	        
-	        print os.path.basename(self.filePath)        
-	        sub = subliminal.download_subtitles(os.path.basename(self.filePath), ['nl'], cache_dir="/tmp")
-	        print sub       	
+
+	        sub = subliminal.download_subtitles(os.path.basename(self.filePath), ['nl'], cache_dir="/tmp", services=self.services)
+	        #print sub       	

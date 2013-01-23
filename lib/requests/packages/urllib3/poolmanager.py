@@ -30,12 +30,8 @@ class PoolManager(RequestMethods):
     necessary connection pools for you.
 
     :param num_pools:
-        Number of connection pools to cache before discarding the least
-        recently used pool.
-
-    :param headers:
-        Headers to include with all requests, unless other headers are given
-        explicitly.
+        Number of connection pools to cache before discarding the least recently
+        used pool.
 
     :param \**connection_pool_kw:
         Additional parameters are used to create fresh
@@ -44,30 +40,18 @@ class PoolManager(RequestMethods):
     Example: ::
 
         >>> manager = PoolManager(num_pools=2)
-        >>> r = manager.request('GET', 'http://google.com/')
-        >>> r = manager.request('GET', 'http://google.com/mail')
-        >>> r = manager.request('GET', 'http://yahoo.com/')
+        >>> r = manager.urlopen("http://google.com/")
+        >>> r = manager.urlopen("http://google.com/mail")
+        >>> r = manager.urlopen("http://yahoo.com/")
         >>> len(manager.pools)
         2
 
     """
 
-    def __init__(self, num_pools=10, headers=None, **connection_pool_kw):
-        RequestMethods.__init__(self, headers)
+    def __init__(self, num_pools=10, **connection_pool_kw):
         self.connection_pool_kw = connection_pool_kw
         self.pools = RecentlyUsedContainer(num_pools,
                                            dispose_func=lambda p: p.close())
-
-    def _new_pool(self, scheme, host, port):
-        """
-        Create a new :class:`ConnectionPool` based on host, port and scheme.
-
-        This method is used to actually create the connection pools handed out
-        by :meth:`connection_from_url` and companion methods. It is intended
-        to be overridden for customization.
-        """
-        pool_cls = pool_classes_by_scheme[scheme]
-        return pool_cls(host, port, **self.connection_pool_kw)
 
     def clear(self):
         """
@@ -85,7 +69,6 @@ class PoolManager(RequestMethods):
         If ``port`` isn't given, it will be derived from the ``scheme`` using
         ``urllib3.connectionpool.port_by_scheme``.
         """
-        scheme = scheme or 'http'
         port = port or port_by_scheme.get(scheme, 80)
 
         pool_key = (scheme, host, port)
@@ -97,8 +80,11 @@ class PoolManager(RequestMethods):
             return pool
 
         # Make a fresh ConnectionPool of the desired type
-        pool = self._new_pool(scheme, host, port)
+        pool_cls = pool_classes_by_scheme[scheme]
+        pool = pool_cls(host, port, **self.connection_pool_kw)
+
         self.pools[pool_key] = pool
+
         return pool
 
     def connection_from_url(self, url):
@@ -127,8 +113,6 @@ class PoolManager(RequestMethods):
 
         kw['assert_same_host'] = False
         kw['redirect'] = False
-        if 'headers' not in kw:
-            kw['headers'] = self.headers
 
         response = conn.urlopen(method, u.request_uri, **kw)
 
@@ -140,7 +124,7 @@ class PoolManager(RequestMethods):
             method = 'GET'
 
         log.info("Redirecting %s -> %s" % (url, redirect_location))
-        kw['retries'] = kw.get('retries', 3) - 1  # Persist retries countdown
+        kw['retries'] = kw.get('retries', 3) - 1 # Persist retries countdown
         return self.urlopen(method, redirect_location, **kw)
 
 
@@ -154,11 +138,13 @@ class ProxyManager(RequestMethods):
         self.proxy_pool = proxy_pool
 
     def _set_proxy_headers(self, headers=None):
-        headers_ = {'Accept': '*/*'}
-        if headers:
-            headers_.update(headers)
+        headers = headers or {}
 
-        return headers_
+        # Same headers are curl passes for --proxy1.0
+        headers['Accept'] = '*/*'
+        headers['Proxy-Connection'] = 'Keep-Alive'
+
+        return headers
 
     def urlopen(self, method, url, **kw):
         "Same as HTTP(S)ConnectionPool.urlopen, ``url`` must be absolute."
