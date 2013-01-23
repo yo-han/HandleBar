@@ -72,8 +72,7 @@ class hbHandle(object):
     		result = md.parseFile()
     		
     		if result != True:
-    			os.mkdir(HandleBarConfigPath + DebugFailedPath + '/video')
-    			os.rename(convertedPath, HandleBarConfigPath + DebugFailedPath + '/video/' + newFilename)
+    			os.rename(convertedPath, HandleBarConfigPath + DebugFailedPath + '/' + newFilename)
     			return False
     		
     		moveToItunes(md.filePath)
