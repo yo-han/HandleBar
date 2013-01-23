@@ -1,6 +1,9 @@
-import ConfigParser, os
+import ConfigParser, os, sys
 
 path = os.path.abspath(os.path.dirname(__file__)) + "/../"
+
+sys.path.insert(0, path)
+sys.path.insert(0, os.path.join(path, 'lib'))
 		
 """ App support path """
 try:
