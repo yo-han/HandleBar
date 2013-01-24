@@ -64,7 +64,7 @@ class metadata:
             			"{Long Description:" + mvd.getDescription() + "}", 
             			"{Rating:" + mvd.getRating() + "}", 
             			"{Media Kind:Movie}",
-            			"{Comments:Original filename " + self.subtitlePath.replace('.srt','') + "}"]   
+            			"{Comments:Original filename " + os.path.basename(self.filePath) + "}"]   
             			
             	
             			        	      	
@@ -106,7 +106,7 @@ class metadata:
             			"{Rating:" + episode.getRating() + "}",
             			"{Director:" + episode.getCast() + "}",
             			"{Media Kind:TV Show}",
-            			"{Comments:Original filename " + self.subtitlePath.replace('.srt','') + "}"]   
+            			"{Comments:Original filename " + os.path.basename(self.filePath) + "}"]   
             			        	      	
             	arguments = [self.SublerCLIPath, "-optimize", "-dest", self.filePath, "-source", subtitles, "-metadata", "".join(tags)]
 				
