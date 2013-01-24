@@ -13,7 +13,7 @@ class subs:
         	if type == "movie":
         		self.services = ['addic7ed', 'opensubtitles', 'subswiki', 'thesubdb']
         	else:
-        		self.services = ['bierdopje','opensubtitles']
+        		self.services = ['bierdopje']
         	
         	       	
         def downloadSubtitles(self):
