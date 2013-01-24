@@ -106,7 +106,7 @@ class metadata:
             			"{Rating:" + episode.getRating() + "}",
             			"{Director:" + episode.getCast() + "}",
             			"{Media Kind:TV Show}",
-            			"{Comment:Original filename: " + self.subtitlePath.replace('.srt','') + "}"]   
+            			"{Comment:Original filename " + self.subtitlePath.replace('.srt','') + "}"]   
             			        	      	
             	arguments = [self.SublerCLIPath, "-optimize", "-dest", self.filePath, "-source", subtitles, "-metadata", "".join(tags)]
 				
