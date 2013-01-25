@@ -5,6 +5,13 @@ from database import *
 def Notify(message, title):
 	if NotificationOn:
 		Notifier.notify(message, group=os.getpid(), title=title)
+		
+	updateConvertStatus(message)
+	
+def updateConvertStatus(status):
+	f = open('/tmp/handleBarCurrentStatus', 'w')
+	f.write(status)
+	f.close()
 
 def moveToItunes(file):
 	
@@ -24,7 +31,7 @@ def parseFailedFiles():
 	
 	media = []
 	
-	for root, dirs, files in os.walk(projectDir + DebugFailedPath):
+	for root, dirs, files in os.walk(HandleBarConfigPath + DebugFailedPath):
 		for files in ['*.m4v']:
 			fp = root + '/' + files
 			media.extend(glob.glob(fp))

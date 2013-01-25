@@ -5,7 +5,7 @@ path = os.path.abspath(os.path.dirname(__file__)) + "/../"
 
 """ App support path """
 try:
-	pf = file(path + "configPath",'r')
+	pf = file(path + "../configPath",'r')
 	appSupportPath = pf.read().strip()
 	pf.close()
 except IOError:

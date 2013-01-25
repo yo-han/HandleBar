@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 """ 
 HandleBar
 """
@@ -22,7 +24,8 @@ class hbHandle(object):
     	
     	if not files:
     		
-    		print "No files found"	
+    		print "No files found"
+    		updateConvertStatus("Idle")	
     		    			
     	else:
     		newFilepath = os.path.splitext(files[0])[0] + '.m4v'
@@ -36,25 +39,25 @@ class hbHandle(object):
     		fileId = filesTable.new(type, oldFilename)
        	    		
     		if not fileId:
-    			Notify('Insert of new file record failed', 'HandleBar: Error')
+    			Notify('Insert of new file record failed', 'HandleBar')
     			return False
     		
-    		Notify('File: ' + oldFilename, 'HandleBar: Start converting ' + type)
+    		Notify('Start converting file: ' + oldFilename, 'HandleBar')
     		
     		os.system('nice -n 20 ' + HandbrakeCLIPath + ' -i "' + oldFilepath + '" -o "' + newFilepath + '" --preset "' + HandBrakePreset + '" --native-language "' + HandBrakeLanguage + '" --native-dub 1> /tmp/handleBarEncode.status')    
     		
     		try:
     			with open(newFilepath) as f: pass
     		except IOError as e:
-    			os.rename(oldFilepath, HandleBarConfigPath + DebugFailedPath + '/' + oldFilename)
+    			os.rename(oldFilepath, HandleBarConfigPath + '/' + DebugFailedPath + '/' + oldFilename)
     			return False
     			
     		filesTable.convertDone(fileId)
     		
-    		Notifier.notify('File: ' + oldFilename, group=os.getpid(), title='HandleBar: Convert done')
+    		Notify('Convert done file: ' + oldFilename,'HandleBar')
 
     		if DebugMode:
-    			os.rename(oldFilepath, HandleBarConfigPath + DebugRemovePath + '/' + oldFilename)
+    			os.rename(oldFilepath, HandleBarConfigPath + '/' + DebugRemovePath + '/' + oldFilename)
     		else:
     			os.remove(oldFilepath)
     		
@@ -62,9 +65,9 @@ class hbHandle(object):
     		sub = subs(newFilepath, type)
     		sub.downloadSubtitles()
     		
-    		Notify('File: ' + oldFilename, 'HandleBar: Parse metadata')
+    		Notify('Parse metadata file: ' + oldFilename, 'HandleBar')
     		
-    		convertedPath = HandleBarConfigPath + ReadyPath + '/' + newFilename
+    		convertedPath = HandleBarConfigPath + '/' + ReadyPath + '/' + newFilename
     		
     		os.rename(newFilepath, convertedPath)
     		
@@ -72,7 +75,7 @@ class hbHandle(object):
     		result = md.parseFile()
     		
     		if result != True:
-    			os.rename(convertedPath, HandleBarConfigPath + DebugFailedPath + '/' + newFilename)
+    			os.rename(convertedPath, HandleBarConfigPath + '/' + DebugFailedPath + '/' + newFilename)
     			return False
     		
     		moveToItunes(md.filePath)

@@ -16,8 +16,8 @@ class metadata:
  
         	self.filePath = file
         	self.fileId = fileId
-        	self.AtomicParsleyPath = projectDir + "/bin/AtomicParsley"
-        	self.SublerCLIPath = projectDir + "/bin/SublerCLI"
+        	self.AtomicParsleyPath = HandleBarBinPath + "/bin/AtomicParsley"
+        	self.SublerCLIPath = HandleBarBinPath + "/bin/SublerCLI"
         	self.subtitlePath = os.path.abspath(projectDir + SubtitlePath + "/" + os.path.basename(self.filePath)).replace('.m4v','.srt')
         	
         	self.guess = guessit.guess_video_info(self.filePath, info = ['filename'])
@@ -45,12 +45,12 @@ class metadata:
             	mvd = movie(guess['title'])
 
             	if mvd.foundMovie == False:
-            		Notify('No data found for this movie', 'HandleBar: Error')
+            		Notify('No data found for this movie', 'HandleBar')
             		return False
 					
             	image = self.downloadImage(mvd.getImage())     
 					
-            	Notify('Movie: ' + mvd.getName(), 'HandleBar: Set metadata')
+            	Notify('Set metadata movie:\n' + mvd.getName(), 'HandleBar')
 
             	tags = ["{Artwork:" + image + "}", 
             			"{HD Video:" + hdb + "}", 
@@ -84,13 +84,13 @@ class metadata:
             	episode = tvEpisode(guess)
 
             	if episode.foundSeries == False:
-            		Notify('No data found for this episode', 'HandleBar: Error')
+            		Notify('No data found for this episode', 'HandleBar')
             		return False
 
             	title = episode.getTitleClean()
             	image = self.downloadImage(episode.getImage())    
            					
-            	Notify('TV Show: ' + title, 'HandleBar: Set metadata')
+            	Notify('Set metadata tv show:\n' + title, 'HandleBar')
 
             	tags = ["{Artwork:" + image + "}", 
             			"{HD Video:" + hdb + "}", 
@@ -125,7 +125,7 @@ class metadata:
 	    		
         def downloadImage(self, url):
         	
-        	path = projectDir + 'media/images/' + os.path.basename(url)
+        	path = projectDir + '/media/images/' + os.path.basename(url)
         	downloaded = False
         	
         	for i in range(0,5):

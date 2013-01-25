@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.join(path, 'lib'))
 		
 """ App support path """
 try:
-	pf = file(path + "configPath",'r')
+	pf = file(path + "../configPath",'r')
 	appSupportPath = pf.read().strip()
 	pf.close()
 except IOError:
@@ -44,7 +44,8 @@ DebugFailedPath = Config.get("HandleBarConfig","DebugFailedPath")
 SubtitlePath = Config.get("HandleBarConfig","SubtitlePath")
 ReadyPath = Config.get("HandleBarConfig","ReadyPath")
 MediaPathsString = Config.get("HandleBarConfig","MediaPaths")
-HandleBarConfigPath = configPath;
+HandleBarConfigPath = configPath
+HandleBarBinPath = path
 
 FileTypeString = Config.get("HandleBarConfig","FileTypes")
 HandBrakePreset = Config.get("HandleBarConfig","HandBrakePreset")

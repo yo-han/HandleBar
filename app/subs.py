@@ -18,7 +18,7 @@ class subs:
         	       	
         def downloadSubtitles(self):
 
-	        cwd = os.path.abspath(projectDir + SubtitlePath)
+	        cwd = os.path.abspath(projectDir + '/' + SubtitlePath)
 	        os.chdir(cwd)	        	        
 
 	        sub = subliminal.download_subtitles(os.path.basename(self.filePath), ['nl'], cache_dir="/tmp", services=self.services)
