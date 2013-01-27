@@ -34,6 +34,10 @@ def ConfigSectionMap(section):
             print("exception on %s!" % option)
             dict1[option] = None
     return dict1
+
+def dirExists(dir):
+	if not os.path.exists(dir):
+		os.mkdir(dir)
     
 DebugMode  = Config.getboolean("HandleBarConfig", "Debug")
 NotificationOn  = Config.getboolean("HandleBarConfig", "NotificationOn")
@@ -53,3 +57,9 @@ HandBrakeLanguage = Config.get("HandleBarConfig","HandBrakeLanguage")
 
 MediaPaths = MediaPathsString.split(',')
 FileTypes = FileTypeString.split(',')
+
+dirExists(path + DebugRemovePath)
+dirExists(path + DebugFailedPath)
+dirExists(path + SubtitlePath)
+dirExists(path + ReadyPath)
+	

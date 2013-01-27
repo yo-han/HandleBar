@@ -19,6 +19,7 @@ class Application(tornado.web.Application):
             (r"/", HomeHandler),
             (r"/log", LoggingHandler),
             (r"/failed", FailedHandler),
+            (r"/retry", RetryFailedHandler),
         ]
         settings = dict(
             page_title=u"HandleBar",
@@ -71,6 +72,13 @@ class FailedHandler(BaseHandler):
     	list = os.listdir(projectDir + '/' + DebugFailedPath) 
     	
         self.render("failed.tpl", entries=list, tabActive='failed')
+        
+class RetryFailedHandler(BaseHandler):
+    def get(self):
+    
+    	parseFailedFiles()
+    
+    	self.redirect('/failed')
 
 class FileModule(tornado.web.UIModule):
     def render(self, entry):
