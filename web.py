@@ -21,6 +21,7 @@ class Application(tornado.web.Application):
             (r"/log", LoggingHandler),
             (r"/failed", FailedHandler),
             (r"/retry", RetryFailedHandler),
+            (r"/progress", ProgressHandler),
         ]
         settings = dict(
             page_title=u"HandleBar",
@@ -87,7 +88,22 @@ class ClearDBHandler(BaseHandler):
     	filesTable.clearDb()
     
     	self.redirect('/failed')
-
+    	
+class ProgressHandler(BaseHandler):
+    def get(self):
+    
+		hb = os.system('ps ax | grep -v grep | grep HandBrakeCLI > /dev/null')
+		
+		if hb == 0:
+			with open("/tmp/handleBarEncode.status") as f:
+				line = unicode(f.readline(),'utf8')
+			
+			log = line.rsplit('\r')[-1]
+		
+			self.write(log)
+		else:
+			self.write('none')
+			
 class FileModule(tornado.web.UIModule):
     def render(self, entry):
         return self.render_string("modules/file.tpl", entry=entry)
