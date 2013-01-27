@@ -1,9 +1,9 @@
-from __future__ import absolute_import, division, with_statement
+from __future__ import absolute_import, division, print_function, with_statement
 import functools
 from tornado.escape import url_escape
 from tornado.httpclient import AsyncHTTPClient
-from tornado.testing import AsyncHTTPTestCase, AsyncTestCase, LogTrapTestCase
-from tornado.util import b
+from tornado.log import app_log
+from tornado.testing import AsyncHTTPTestCase, AsyncTestCase, ExpectLog
 from tornado.web import Application, RequestHandler, asynchronous
 
 from tornado import gen
@@ -20,7 +20,7 @@ class GenTest(AsyncTestCase):
             callback(arg)
         else:
             self.io_loop.add_callback(functools.partial(
-                    self.delay_callback, iterations - 1, callback, arg))
+                self.delay_callback, iterations - 1, callback, arg))
 
     def test_no_yield(self):
         @gen.engine
@@ -215,7 +215,7 @@ class GenTest(AsyncTestCase):
             responses = yield [
                 gen.Task(self.delay_callback, 3, arg="v1"),
                 gen.Task(self.delay_callback, 1, arg="v2"),
-                ]
+            ]
             self.assertEqual(responses, ["v1", "v2"])
             self.stop()
         self.run_gen(f)
@@ -261,7 +261,7 @@ class GenTest(AsyncTestCase):
 
         @gen.engine
         def outer():
-            for i in xrange(10):
+            for i in range(10):
                 yield gen.Task(inner)
             stack_increase = len(stack_context._state.contexts) - initial_stack_depth
             self.assertTrue(stack_increase <= 2)
@@ -280,7 +280,7 @@ class GenTest(AsyncTestCase):
 
         @gen.engine
         def outer():
-            for i in xrange(10):
+            for i in range(10):
                 try:
                     yield gen.Task(inner)
                 except ZeroDivisionError:
@@ -317,7 +317,7 @@ class GenTaskHandler(RequestHandler):
         client = AsyncHTTPClient(io_loop=io_loop)
         response = yield gen.Task(client.fetch, self.get_argument('url'))
         response.rethrow()
-        self.finish(b("got response: ") + response.body)
+        self.finish(b"got response: " + response.body)
 
 
 class GenExceptionHandler(RequestHandler):
@@ -346,28 +346,29 @@ class GenYieldExceptionHandler(RequestHandler):
             self.finish('ok')
 
 
-class GenWebTest(AsyncHTTPTestCase, LogTrapTestCase):
+class GenWebTest(AsyncHTTPTestCase):
     def get_app(self):
         return Application([
-                ('/sequence', GenSequenceHandler),
-                ('/task', GenTaskHandler),
-                ('/exception', GenExceptionHandler),
-                ('/yield_exception', GenYieldExceptionHandler),
-                ])
+            ('/sequence', GenSequenceHandler),
+            ('/task', GenTaskHandler),
+            ('/exception', GenExceptionHandler),
+            ('/yield_exception', GenYieldExceptionHandler),
+        ])
 
     def test_sequence_handler(self):
         response = self.fetch('/sequence')
-        self.assertEqual(response.body, b("123"))
+        self.assertEqual(response.body, b"123")
 
     def test_task_handler(self):
         response = self.fetch('/task?url=%s' % url_escape(self.get_url('/sequence')))
-        self.assertEqual(response.body, b("got response: 123"))
+        self.assertEqual(response.body, b"got response: 123")
 
     def test_exception_handler(self):
         # Make sure we get an error and not a timeout
-        response = self.fetch('/exception')
+        with ExpectLog(app_log, "Uncaught exception GET /exception"):
+            response = self.fetch('/exception')
         self.assertEqual(500, response.code)
 
     def test_yield_exception_handler(self):
         response = self.fetch('/yield_exception')
-        self.assertEqual(response.body, b('ok'))
+        self.assertEqual(response.body, b'ok')

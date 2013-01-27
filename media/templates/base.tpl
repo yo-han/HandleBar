@@ -3,19 +3,19 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>{{appName}}</title>
+    <title>{{ escape(handler.settings["page_title"]) }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="/media/css/bootstrap.css" rel="stylesheet">
+    <link href="{{ static_url("css/bootstrap.css") }}" rel="stylesheet">
     <style>
       body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
       }
     </style>
-    <link href="/media/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="{{ static_url("css/bootstrap-responsive.css") }}" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -40,12 +40,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">{{appName}}</a>
+          <a class="brand" href="#">{{ escape(handler.settings["page_title"]) }}</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li class="active"><a href="/">Home</a></li>
-              <li><a href="/log">Logging</a></li>
-              <li><a href="/failed">Failed</a></li>
+              <li {% if tabActive == 'home' %}class="active"{% end %}><a href="/">Home</a></li>
+              <li {% if tabActive == 'log' %}class="active"{% end %}><a href="/log">Logging</a></li>
+              <li {% if tabActive == 'failed' %}class="active"{% end %}><a href="/failed">Failed</a></li>
             </ul>
           </div><!--/.nav-collapse -->
           <div class="nav-collapse collapse pull-right">
@@ -59,15 +59,15 @@
 
     <div class="container">
 	   
-	   %include
+	   {% block body %}{% end %}
 
     </div> <!-- /container -->
 
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="/media/js/jquery.js"></script>
-    <script src="/media/js/bootstrap.min.js"></script>
+    <script src="{{ static_url("js/jquery.js") }}"></script>
+    <script src="{{ static_url("js/bootstrap.min.js") }}"></script>
     <script type="text/javascript">
        
        function getProgress() {
