@@ -1,4 +1,4 @@
-import ConfigParser, os, sys
+import ConfigParser, os, sys, shutil
 
 path = os.path.abspath(os.path.dirname(__file__)) + "/../"
 
@@ -18,10 +18,6 @@ if path.find("HandleBarApp.app") is not -1:
 else:
 	configPath = path
 
-""" Config """
-Config = ConfigParser.ConfigParser()
-Config.read(configPath + "/config.ini")
-
 def ConfigSectionMap(section):
     dict1 = {}
     options = Config.options(section)
@@ -38,6 +34,18 @@ def ConfigSectionMap(section):
 def dirExists(dir):
 	if not os.path.exists(dir):
 		os.mkdir(dir)
+		
+def fileExists(file):
+	filePath = path + 'app/default/' + file
+	if not os.path.exists(configPath + '/' + file):
+		shutil.copyfile(filePath, configPath + '/' + file)	
+		
+fileExists('config.ini')
+fileExists('handleBar.db')
+
+""" Config """
+Config = ConfigParser.ConfigParser()
+Config.read(configPath + "/config.ini")
     
 DebugMode  = Config.getboolean("HandleBarConfig", "Debug")
 NotificationOn  = Config.getboolean("HandleBarConfig", "NotificationOn")
@@ -62,4 +70,3 @@ dirExists(path + DebugRemovePath)
 dirExists(path + DebugFailedPath)
 dirExists(path + SubtitlePath)
 dirExists(path + ReadyPath)
-	
