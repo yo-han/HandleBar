@@ -17,6 +17,7 @@ class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
             (r"/", HomeHandler),
+            (r"/clear", ClearDBHandler),
             (r"/log", LoggingHandler),
             (r"/failed", FailedHandler),
             (r"/retry", RetryFailedHandler),
@@ -77,6 +78,13 @@ class RetryFailedHandler(BaseHandler):
     def get(self):
     
     	parseFailedFiles()
+    
+    	self.redirect('/failed')
+    	
+class ClearDBHandler(BaseHandler):
+    def get(self):
+    
+    	filesTable.clearDb()
     
     	self.redirect('/failed')
 
