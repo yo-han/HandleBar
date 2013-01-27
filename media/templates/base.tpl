@@ -70,20 +70,14 @@
     <script src="{{ static_url("js/bootstrap.min.js") }}"></script>
     <script type="text/javascript">
        
-       function getProgress() {
-       		$.get('/progress', function(r) {
-            	
-            	if(r != 'none')
-            		$('#hb-status a').html(r);
-            	else
-            		$('#hb-status a').html('nothing is converting');
-             });
-       }
-          	
-       $(function(){
-	       getProgress();
-	       //setInterval('getProgress()',1000);
-       });        	
+      var ws = new WebSocket("ws://" + location.host + "/progresssocket");
+	  ws.onopen = function() {
+	     ws.send("Hello, world");
+	  };
+	  ws.onmessage = function (evt) {
+	     $('#hb-status a').html(evt.data);
+	  };
+        	
        </script>
   </body>
 </html>

@@ -3,11 +3,13 @@
 from lib import *
 from app import *
 
+import time
 import os.path
 import tornado.httpserver
 import tornado.ioloop
 import tornado.options
 import tornado.web
+import tornado.websocket
 
 from tornado.options import define, options
 
@@ -22,6 +24,7 @@ class Application(tornado.web.Application):
             (r"/failed", FailedHandler),
             (r"/retry", RetryFailedHandler),
             (r"/progress", ProgressHandler),
+            (r"/progresssocket", ProgressSocketHandler),
         ]
         settings = dict(
             page_title=u"HandleBar",
@@ -103,6 +106,34 @@ class ProgressHandler(BaseHandler):
 			self.write(log)
 		else:
 			self.write('none')
+
+class ProgressSocketHandler(tornado.websocket.WebSocketHandler):
+    
+    def allow_draft76(self):
+        # for iOS 5.0 Safari
+        return True
+
+    def open(self):
+          print "WebSocket opened"
+		        
+    def on_message(self, message):
+        
+		while True:
+			hb = os.system('ps ax | grep -v grep | grep HandBrakeCLI > /dev/null')
+			
+			if hb == 0:
+				with open("/tmp/handleBarEncode.status") as f:
+					line = unicode(f.readline(),'utf8')
+				
+				log = line.rsplit('\r')[-1]
+			
+				self.write_message(log)
+			else:
+				self.write_message('nothing enconding')        			
+				
+			time.sleep(1)
+				
+			
 			
 class FileModule(tornado.web.UIModule):
     def render(self, entry):
