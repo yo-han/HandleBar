@@ -1,6 +1,7 @@
 HandleBar
 =========
 
+## Warning ##
 HandleBar is a project in progress. The current master may or not be stable at this moment, it differs with the day. 
 
 ## Goal ##
