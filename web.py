@@ -118,21 +118,17 @@ class ProgressSocketHandler(tornado.websocket.WebSocketHandler):
 		        
     def on_message(self, message):
         
-		while True:
-			hb = os.system('ps ax | grep -v grep | grep HandBrakeCLI > /dev/null')
+		hb = os.system('ps ax | grep -v grep | grep HandBrakeCLI > /dev/null')
+		
+		if hb == 0:
+			with open("/tmp/handleBarEncode.status") as f:
+				line = unicode(f.readline(),'utf8')
 			
-			if hb == 0:
-				with open("/tmp/handleBarEncode.status") as f:
-					line = unicode(f.readline(),'utf8')
-				
-				log = line.rsplit('\r')[-1]
-			
-				self.write_message(log)
-			else:
-				self.write_message('nothing enconding')        			
-				
-			time.sleep(1)
-				
+			log = line.rsplit('\r')[-1]
+		
+			self.write_message(log)
+		else:
+			self.write_message('nothing enconding')        			
 			
 			
 class FileModule(tornado.web.UIModule):
@@ -163,6 +159,8 @@ if __name__ == "__main__":
 			daemon.stop()
 		elif 'restart' == sys.argv[1]:
 			daemon.restart()
+		elif 'test' == sys.argv[1]:
+			main()
 		else:
 			print "Unknown command"
 			sys.exit(2)

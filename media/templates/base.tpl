@@ -72,7 +72,8 @@
        
       var ws = new WebSocket("ws://" + location.host + "/progresssocket");
 	  ws.onopen = function() {
-	     ws.send("Hello, world");
+	     
+	     setInterval(function() { ws.send("progress") }, 1000);
 	  };
 	  ws.onmessage = function (evt) {
 	     $('#hb-status a').html(evt.data);
