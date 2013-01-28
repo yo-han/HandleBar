@@ -51,6 +51,53 @@ def parseFailedFiles():
 		
 		moveToItunes(md.filePath)
 		
+def reSub():
+	
+	media = []
+	
+	import popen2
+	import enzyme
+	
+	for root, dirs, files in os.walk('/Users/johan/Music/iTunes/iTunes Media/Movies'):
+		for files in ['*.m4v']:
+			fp = root + '/' + files
+			media.extend(glob.glob(fp))
+			
+	for path in media:
+		  		
+		r = popen2.popen3(HandleBarConfigPath + 'bin/SublerCLI -source "' + path + '" -listtracks')
+		tracks = r[0].readlines()
+		r[0].close()
+				
+		subsInTrack = filter(hasSubtitle, tracks)
+		if len(subsInTrack) > 0:
+			continue
+			
+		r = popen2.popen3(HandleBarConfigPath + 'bin/SublerCLI -source "' + path + '" -listmetadata')
+		comments = r[0].readlines()
+		matches = filter(hasComments, comments)
+		
+		if len(matches) > 0:
+
+			start = len('Comments: Original filename ')
+			file = matches[0][start:].strip()
+			
+			md = metadata(file, 0)
+			
+			sub = subs(file, md.guess['type'])
+			sub.downloadSubtitles()
+			
+		
+def hasComments(f):
+	if f.find('Comments: Original filename') > -1:
+		return True
+	return False
+	
+def hasSubtitle(f):
+	if f.find('Subtitle Track') > -1:
+		return True
+	return False
+	
 """ Logger (not in use, but can be used for debugging purposes """
 log = Logger('HandleBar')
 
