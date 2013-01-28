@@ -4,7 +4,12 @@
 HandleBar
 """
 
-import os, sys, glob, time, guessit
+import os
+import sys
+import glob
+import time
+import guessit
+import enzyme
 from lib import *
 from app import *
 
@@ -43,8 +48,10 @@ class hbHandle(object):
     			return False
     		
     		Notify('Start converting file: ' + oldFilename, 'HandleBar')
-    		
-    		os.system('nice -n 20 ' + HandbrakeCLIPath + ' -i "' + oldFilepath + '" -o "' + newFilepath + '" --preset "' + HandBrakePreset + '" --native-language "' + HandBrakeLanguage + '" --native-dub 1> /tmp/handleBarEncode.status')    
+
+    		audioTracks = self.getAudioTracks(oldFilepath)
+
+    		os.system('nice -n 20 ' + HandbrakeCLIPath + ' -i "' + oldFilepath + '" -o "' + newFilepath + '" --audio "' + audioTracks + '" --preset "' + HandBrakePreset + '" --native-language "' + HandBrakeLanguage + '" --native-dub 1> /tmp/handleBarEncode.status')    
     		
     		try:
     			with open(newFilepath) as f: pass
@@ -93,7 +100,20 @@ class hbHandle(object):
     			if fp.find('_UNPACK_') < 0:
     				media.extend(glob.glob(fp))
     	
-    	return media   			  
+    	return media
+    	
+    def getAudioTracks(self, file):
+	
+		trackList = []
+		trackNo = 0
+		
+		p = enzyme.parse(file)
+		
+		for track in p['audio']:
+			trackNo=+1
+			trackList.append(str(trackNo))
+
+		return ",".join(trackList)
     	
 hb = hbHandle();
 
