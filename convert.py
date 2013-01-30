@@ -107,7 +107,10 @@ class hbHandle(object):
 		trackList = []
 		trackNo = 0
 		
-		p = enzyme.parse(file)
+		try:
+			p = enzyme.parse(file)
+		except:
+			return "1"
 		
 		for track in p['audio']:
 			trackNo=+1

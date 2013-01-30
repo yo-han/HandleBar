@@ -22,7 +22,7 @@ class tvEpisode:
 		
 		self._setTitle(serieData['series'])
 		
-		if "season" in serieData:
+		if "season" in serieData and "episodeNumber" in serieData:
 						
 			self._setSeason(serieData['season'])
 			self._setEpisode(serieData['episodeNumber'])
