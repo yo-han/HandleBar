@@ -25,7 +25,7 @@ def moveToItunes(file):
 				end tell
 				EOF""" % file)
 							
-	#os.remove(file)
+	os.remove(file)
 	
 def parseFailedFiles():
 	
@@ -47,6 +47,7 @@ def parseFailedFiles():
 		result = md.parseFile()
 		
 		if result != True:
+			print "FAILED --"
 			return False
 		
 		moveToItunes(md.filePath)
