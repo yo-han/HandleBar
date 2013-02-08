@@ -57,14 +57,16 @@ def reSub():
 	
 	import popen2
 	import enzyme
-	
-	for root, dirs, files in os.walk('/Users/johan/Music/iTunes/iTunes Media/Movies'):
-		for files in ['*.m4v']:
-			fp = root + '/' + files
-			media.extend(glob.glob(fp))
+
+	for mediaPath in ReSubSearchPaths:
+		for root, dirs, files in os.walk(mediaPath):
+			for files in ['*.m4v']:
+				fp = root + '/' + files
+				print fp
+				media.extend(glob.glob(fp))
 			
 	for path in media:
-		  		
+ 		
 		r = popen2.popen3(HandleBarConfigPath + 'bin/SublerCLI -source "' + path + '" -listtracks')
 		tracks = r[0].readlines()
 		r[0].close()
@@ -78,12 +80,12 @@ def reSub():
 		matches = filter(hasComments, comments)
 		
 		if len(matches) > 0:
-
+			
 			start = len('Comments: Original filename ')
 			file = matches[0][start:].strip()
 			
 			md = metadata(file, 0)
-			
+			print file
 			sub = subs(file, md.guess['type'])
 			sub.downloadSubtitles()
 			

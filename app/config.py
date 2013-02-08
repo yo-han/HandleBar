@@ -56,6 +56,7 @@ DebugFailedPath = Config.get("HandleBarConfig","DebugFailedPath")
 SubtitlePath = Config.get("HandleBarConfig","SubtitlePath")
 ReadyPath = Config.get("HandleBarConfig","ReadyPath")
 MediaPathsString = Config.get("HandleBarConfig","MediaPaths")
+ReSubSearchPathsString = Config.get("HandleBarConfig","ReSubSearchPaths")
 HandleBarConfigPath = configPath
 HandleBarBinPath = path
 
@@ -64,6 +65,7 @@ HandBrakePreset = Config.get("HandleBarConfig","HandBrakePreset")
 HandBrakeLanguage = Config.get("HandleBarConfig","HandBrakeLanguage")
 
 MediaPaths = MediaPathsString.split(',')
+ReSubSearchPaths = ReSubSearchPathsString.split(',')
 FileTypes = FileTypeString.split(',')
 
 dirExists(path + DebugRemovePath)

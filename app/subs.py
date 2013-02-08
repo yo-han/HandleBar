@@ -1,4 +1,4 @@
-import os, subliminal
+import os, subliminal, lxml
 
 from app import *
 
