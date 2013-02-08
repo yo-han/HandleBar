@@ -7,6 +7,11 @@ Converting videos to an iTunes format with the correct metadata, cover and subti
 
 Check [HandleBarMenulet](https://github.com/yo-han/HandleBarMenulet) for a nice Cocoa menulet wrapper around this code.
 
+## Requirements ##
+If you plan to use the handleBar subtitles service `lxml` is required. Installing `lxml` is easy:
+
+`$ sudo easy_install lxml`
+
 ## HandleBar wouldn't be possible without: ##
 Unix Daemon by Sander Marechal [website](http://www.jejik.com/articles/2007/02/a_simple_unix_linux_daemon_in_python/)  
 Tornado [website](http://www.tornadoweb.org/)  
