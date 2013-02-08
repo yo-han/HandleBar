@@ -63,7 +63,6 @@ def reSub():
 		for root, dirs, files in os.walk(mediaPath):
 			for files in ['*.m4v']:
 				fp = root + '/' + files
-				print fp
 				media.extend(glob.glob(fp))
 			
 	for path in media:
@@ -86,10 +85,11 @@ def reSub():
 			file = matches[0][start:].strip()
 			
 			md = metadata(file, 0)
-			print file
 			sub = subs(file, md.guess['type'])
 			sub.downloadSubtitles()
 			
+			md.addSubtitles(path)
+						
 		
 def hasComments(f):
 	if f.find('Comments: Original filename') > -1:

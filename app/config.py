@@ -63,6 +63,8 @@ HandleBarBinPath = path
 FileTypeString = Config.get("HandleBarConfig","FileTypes")
 HandBrakePreset = Config.get("HandleBarConfig","HandBrakePreset")
 HandBrakeLanguage = Config.get("HandleBarConfig","HandBrakeLanguage")
+SubtitleLanguage = Config.get("HandleBarConfig","SubtitleLanguage")
+SubtitleLanguageISO = Config.get("HandleBarConfig","SubtitleLanguageISO")
 
 MediaPaths = MediaPathsString.split(',')
 ReSubSearchPaths = ReSubSearchPathsString.split(',')

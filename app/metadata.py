@@ -18,10 +18,18 @@ class metadata:
         	self.fileId = fileId
         	self.AtomicParsleyPath = HandleBarBinPath + "/bin/AtomicParsley"
         	self.SublerCLIPath = HandleBarBinPath + "/bin/SublerCLI"
-        	self.subtitlePath = os.path.abspath(projectDir + SubtitlePath + "/" + os.path.basename(self.filePath)).replace('.m4v','.srt')
+        	self.subtitlePath = os.path.abspath(HandleBarConfigPath + SubtitlePath + "/" + os.path.basename(self.filePath)).replace('.m4v','.srt')
         	
         	self.guess = guessit.guess_video_info(self.filePath, info = ['filename'])
-        	       	
+        	
+        def addSubtitles(self, originalFilePath):
+	        print originalFilePath
+        	if os.path.exists(self.subtitlePath):
+				arguments = [self.SublerCLIPath, "-dest", originalFilePath, "-source", self.subtitlePath,"-language",SubtitleLanguage]
+				print originalFilePath	
+				logProc = open("/tmp/SublrCLI.log", "a")
+				subprocess.Popen(arguments, shell=False, stdout=logProc, stderr=subprocess.STDOUT, preexec_fn = self.preexec).communicate()
+               	
         def parseFile(self):
 	           	   		
         	return self.setMetaData(self.guess)
@@ -68,7 +76,7 @@ class metadata:
             			
             	
             			        	      	
-            	arguments = [self.SublerCLIPath, "-optimize", "-dest", self.filePath, "-source", subtitles, "-metadata", "".join(tags)]
+            	arguments = [self.SublerCLIPath, "-optimize", "-dest", self.filePath, "-source", subtitles, "-metadata", "".join(tags),"-language",SubtitleLanguage]
 				
             	logProc = open("/tmp/SublrCLI.log", "a")
             	subprocess.Popen(arguments, shell=False, stdout=logProc, stderr=subprocess.STDOUT, preexec_fn = self.preexec).communicate()
@@ -108,7 +116,7 @@ class metadata:
             			"{Media Kind:TV Show}",
             			"{Comments:Original filename " + os.path.basename(self.filePath) + "}"]   
             			        	      	
-            	arguments = [self.SublerCLIPath, "-optimize", "-dest", self.filePath, "-source", subtitles, "-metadata", "".join(tags)]
+            	arguments = [self.SublerCLIPath, "-optimize", "-dest", self.filePath, "-source", subtitles, "-metadata", "".join(tags),"-language",SubtitleLanguage]
 				
             	logProc = open("/tmp/SublrCLI.log", "a")
             	subprocess.Popen(arguments, shell=False, stdout=logProc, stderr=subprocess.STDOUT, preexec_fn = self.preexec).communicate()
@@ -125,7 +133,7 @@ class metadata:
 	    		
         def downloadImage(self, url):
         	
-        	path = projectDir + '/media/images/' + os.path.basename(url)
+        	path = HandleBarConfigPath + '/media/images/' + os.path.basename(url)
         	downloaded = False
         	
         	for i in range(0,5):
