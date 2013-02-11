@@ -145,6 +145,8 @@ class tvEpisode:
 			title = _title[:-5]
 		elif _title.find('Archer') != -1:
 			title = _title[0:6]
+		elif _title.find('Touch') != -1:
+			title = _title[0:5]
 		else:
 			title = _title
 			
@@ -222,6 +224,8 @@ class tvEpisode:
 		_title = title
 		if _title.find('Archer') != -1:
 			title = title + " (2009)"
+		if _title.find('Touch') != -1:
+			title = title + " (2012)"
 		else:
 			title = _title
 			
