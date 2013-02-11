@@ -1,6 +1,6 @@
 """ HandleBar """
 
-from lib import *
 from app import *
+from lib import *
 
 parseFailedFiles()

@@ -191,7 +191,7 @@ class movie:
 		else:
 			return ""
 			
-	def getImdbid(self):				
+	def getImdbId(self):				
 		
 		if self.imdbId is not None:
 			return self.imdbId

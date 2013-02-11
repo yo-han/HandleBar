@@ -10,6 +10,7 @@ import tornado.ioloop
 import tornado.options
 import tornado.web
 import tornado.websocket
+import guessit
 
 from tornado.options import define, options
 
@@ -22,6 +23,7 @@ class Application(tornado.web.Application):
             (r"/clear", ClearDBHandler),
             (r"/log", LoggingHandler),
             (r"/failed", FailedHandler),
+            (r"/metadata", MetadataHandler),
             (r"/retry", RetryFailedHandler),
             (r"/progress", ProgressHandler),
             (r"/progresssocket", ProgressSocketHandler),
@@ -31,7 +33,6 @@ class Application(tornado.web.Application):
             template_path=os.path.join(os.path.dirname(__file__), "media/templates"),
             static_path=os.path.join(os.path.dirname(__file__), "media/static"),
             ui_modules={"File": FileModule},
-            xsrf_cookies=True,
             autoescape=None,
             debug=True,
         )
@@ -84,7 +85,28 @@ class RetryFailedHandler(BaseHandler):
     	parseFailedFiles()
     
     	self.redirect('/failed')
-    	
+
+class MetadataHandler(BaseHandler):
+    def get(self): 	
+        self.render("metadata.tpl", metadata=False, guessit=False, tabActive='metadata')
+    
+    def post(self): 	
+		guess = guessit.guess_video_info(self.get_argument("filename"), info = ['filename'])
+		data = ""
+		
+		if guess['type'] == "movie":
+			results = tmdb.search(guess['title'])
+			
+			if results:
+				data = tmdb.getMovieInfo(results[0]['id'])
+			
+		elif guess['type'] == "episode":
+		
+			tvdb = tvdb_api.Tvdb()
+			data = tvdb[guess['series']].data
+			
+		self.render("metadata.tpl", metadata=data, guessit=guess, tabActive='metadata')
+        
 class ClearDBHandler(BaseHandler):
     def get(self):
     
@@ -135,7 +157,9 @@ class FileModule(tornado.web.UIModule):
     def render(self, entry):
         return self.render_string("modules/file.tpl", entry=entry)
 
-
+def nl2br(s):
+    return '<br />'.join(s.splitlines()) 
+    
 def main():
     tornado.options.parse_command_line()
     http_server = tornado.httpserver.HTTPServer(Application())

@@ -46,6 +46,7 @@
               <li {% if tabActive == 'home' %}class="active"{% end %}><a href="/">Home</a></li>
               <li {% if tabActive == 'log' %}class="active"{% end %}><a href="/log">Logging</a></li>
               <li {% if tabActive == 'failed' %}class="active"{% end %}><a href="/failed">Failed</a></li>
+              <li {% if tabActive == 'metadata' %}class="active"{% end %}><a href="/metadata">Metadata</a></li>
             </ul>
           </div><!--/.nav-collapse -->
           <div class="nav-collapse collapse pull-right">

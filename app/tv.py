@@ -18,6 +18,7 @@ class tvEpisode:
 		self.seriesGenre = None
 		self.seriesImage = None
 		self.seriesCast = None
+		self.seriesImdbId = None
 		self.foundSeries = False
 		
 		self._setTitle(serieData['series'])
@@ -51,14 +52,16 @@ class tvEpisode:
 			self._setGenre(series['genre'])
 			self._setRating(series['contentrating'])		
 			self._setCast(series['actors'])
+			self._setImdbId(series['imdb_id'])
 			
 			self.foundSeries = True
 			
-		#except UnicodeEncodeError:
-		#	import sys, pdb
-		#	pdb.post_mortem(sys.exc_info()[2])	
+		except UnicodeEncodeError:
+			import sys, pdb
+			pdb.post_mortem(sys.exc_info()[2])	
 		
 		except:
+			import sys
 			print "Unexpected error:", sys.exc_info()[0]
 			return False
 			
@@ -114,6 +117,11 @@ class tvEpisode:
 		
 		if cast is not None:
 			self.seriesCast  = ",".join(cast.split('|'))
+			
+	def _setImdbId(self, imdbId):
+		
+		if imdbId is not None:
+			self.seriesImdbId  = str(imdbId).strip()
 			
 	def _setArtwork(self, banners, season, tvdb):
 
@@ -202,6 +210,12 @@ class tvEpisode:
 			return self.seriesCast
 		else:
 			return ""
+			
+	def getImdbId(self): 
+		if self.seriesImdbId is not None:
+			return self.seriesImdbId
+		else:
+			return ""		
 			
 	def _optimizeTitleForSearch(self, title):
 	

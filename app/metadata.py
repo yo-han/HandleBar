@@ -1,7 +1,15 @@
-import os, sys, glob, time, guessit
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+""" 
+HandleBar
+"""
 
-from lib import *
+import os
+import sys
+import glob
+import time
 from app import *
+from lib import *
 
 projectDir = HandleBarConfigPath
 
@@ -71,17 +79,16 @@ class metadata:
             			"{Description:" + mvd.getDescription() + "}", 
             			"{Long Description:" + mvd.getDescription() + "}", 
             			"{Rating:" + mvd.getRating() + "}", 
+            			"{contentID:" + mvd.getImdbId() + "}",
             			"{Media Kind:Movie}",
             			"{Comments:Original filename " + os.path.basename(self.filePath) + "}"]   
-            			
-            	
             			        	      	
             	arguments = [self.SublerCLIPath, "-optimize", "-dest", self.filePath, "-source", subtitles, "-metadata", "".join(tags),"-language",SubtitleLanguage]
 				
             	logProc = open("/tmp/SublrCLI.log", "a")
             	subprocess.Popen(arguments, shell=False, stdout=logProc, stderr=subprocess.STDOUT, preexec_fn = self.preexec).communicate()
 
-            	filesTable.movie(self.fileId, mvd.getName(), os.path.basename(image), mvd.getDirector(), mvd.getGenre(), mvd.getReleased(), mvd.getDescription(), mvd.getRating(), mvd.getImdbid(), hdb)
+            	filesTable.movie(self.fileId, mvd.getName(), os.path.basename(image), mvd.getDirector(), mvd.getGenre(), mvd.getReleased(), mvd.getDescription(), mvd.getRating(), mvd.getImdbId(), hdb)
 				
             	return True      	
             	
@@ -113,6 +120,7 @@ class metadata:
             			"{Long Description:" + episode.getDescription() + "}", 
             			"{Rating:" + episode.getRating() + "}",
             			"{Director:" + episode.getCast() + "}",
+            			"{contentID:" + episode.getImdbId() + "}",
             			"{Media Kind:TV Show}",
             			"{Comments:Original filename " + os.path.basename(self.filePath) + "}"]   
             			        	      	
