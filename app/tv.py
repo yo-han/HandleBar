@@ -121,7 +121,7 @@ class tvEpisode:
 	def _setImdbId(self, imdbId):
 		
 		if imdbId is not None:
-			self.seriesImdbId  = str(imdbId).strip()
+			self.seriesImdbId  = imdbId.strip()
 			
 	def _setArtwork(self, banners, season, tvdb):
 

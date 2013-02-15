@@ -120,7 +120,6 @@ class metadata:
             			"{Long Description:" + episode.getDescription() + "}", 
             			"{Rating:" + episode.getRating() + "}",
             			"{Director:" + episode.getCast() + "}",
-            			"{contentID:" + episode.getImdbId() + "}",
             			"{Media Kind:TV Show}",
             			"{Comments:Original filename " + os.path.basename(self.filePath) + "}"]   
             			        	      	
