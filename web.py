@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from lib import *
 from app import *
+from lib import *
 
 import time
 import os.path
