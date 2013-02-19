@@ -53,29 +53,29 @@ def parseFailedFiles():
 		moveToItunes(md.filePath)
 		
 def reSub():
-	
+
 	media = []
 	
 	import popen2
 	import enzyme
-
+	
 	for mediaPath in ReSubSearchPaths:
 		for root, dirs, files in os.walk(mediaPath):
 			for files in ['*.m4v']:
 				fp = root + '/' + files
 				media.extend(glob.glob(fp))
-			
+		
 	for path in media:
  		
-		r = popen2.popen3(HandleBarConfigPath + 'bin/SublerCLI -source "' + path + '" -listtracks')
+		r = popen2.popen3(HandleBarBinPath + '/bin/SublerCLI -source "' + path + '" -listtracks')
 		tracks = r[0].readlines()
 		r[0].close()
 				
 		subsInTrack = filter(hasSubtitle, tracks)
 		if len(subsInTrack) > 0:
 			continue
-			
-		r = popen2.popen3(HandleBarConfigPath + 'bin/SublerCLI -source "' + path + '" -listmetadata')
+
+		r = popen2.popen3(HandleBarBinPath + '/bin/SublerCLI -source "' + path + '" -listmetadata')
 		comments = r[0].readlines()
 		matches = filter(hasComments, comments)
 		

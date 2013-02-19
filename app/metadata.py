@@ -26,12 +26,12 @@ class metadata:
         	self.fileId = fileId
         	self.AtomicParsleyPath = HandleBarBinPath + "/bin/AtomicParsley"
         	self.SublerCLIPath = HandleBarBinPath + "/bin/SublerCLI"
-        	self.subtitlePath = os.path.abspath(HandleBarConfigPath + SubtitlePath + "/" + os.path.basename(self.filePath)).replace('.m4v','.srt')
+        	self.subtitlePath = os.path.abspath(HandleBarConfigPath + "/" + SubtitlePath + "/" + os.path.basename(self.filePath)).replace('.m4v','.srt')
         	
         	self.guess = guessit.guess_video_info(self.filePath, info = ['filename'])
         	
         def addSubtitles(self, originalFilePath):
-	        print originalFilePath
+	        print self.subtitlePath
         	if os.path.exists(self.subtitlePath):
 				arguments = [self.SublerCLIPath, "-dest", originalFilePath, "-source", self.subtitlePath,"-language",SubtitleLanguage]
 				print originalFilePath	
