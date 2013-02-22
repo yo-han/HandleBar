@@ -101,6 +101,23 @@ def hasSubtitle(f):
 		return True
 	return False
 	
+def findThisProcess( process_name ):
+	ps = subprocess.Popen("ps -eaf | grep "+process_name, shell=True, stdout=subprocess.PIPE)
+	output = ps.stdout.read()
+	ps.stdout.close()
+	ps.wait()
+	
+	return output
+ 
+def isThisRunning( process_name ):
+	output = findThisProcess( process_name )
+	
+	if re.search("/bin/" + process_name, output) is None:
+		return False
+	else:
+		return True
+
+	
 """ Logger (not in use, but can be used for debugging purposes """
 log = Logger('HandleBar')
 
