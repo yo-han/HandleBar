@@ -6,8 +6,6 @@
 	<true/>
 	<key>NotificationOn</key>
 	<true/>
-	<key>HandbrakeCLIPath</key>
-	<string>/bin/HandBrakeCLI</string>
 	<key>DebugRemovePath</key>
 	<string>media/done</string>
 	<key>DebugFailedPath</key>
@@ -18,25 +16,64 @@
 	<string>media/converted</string>
 	<key>MediaPaths</key>
 	<array>
-		<string>/Users/johan/Downloads/tv</string>
-		<string>/Users/johan/Downloads/movies</string>
+		<dict>
+			<key>path</key>
+			<string>/Users/johan/Downloads/tv</string>
+		</dict>
+		<dict>
+			<key>path</key>
+			<string>/Users/johan/Downloads/movies</string>
+		</dict>
 	</array>
 	<key>ReSubSearchPaths</key>
 	<array>
-		<string>/Users/johan/Music/iTunes/iTunes Media/TV Shows</string>
-		<string>/Users/johan/Music/iTunes/iTunes Media/Movies</string>
+		<dict>
+			<key>path</key>
+			<string>/Users/johan/Music/iTunes/iTunes Media/TV Shows</string>
+		</dict>
+		<dict>
+			<key>path</key>
+			<string>/Users/johan/Music/iTunes/iTunes Media/Movies</string>
+		</dict>
 	</array>
 	<key>FileTypes</key>
 	<array>
-		<string>*.mkv</string>
-		<string>*.wmv</string>
-		<string>*.mov</string>
-		<string>*.avi</string>
-		<string>*.m2ts</string>
-		<string>*.mp4</string>
-		<string>*.iso</string>
-		<string>*.mpg</string>
-		<string>*.ts</string>
+		<dict>
+			<key>file</key>
+			<string>*.mkv</string>
+		</dict>
+		<dict>
+			<key>file</key>
+			<string>*.wmv</string>
+		</dict>
+		<dict>
+			<key>file</key>
+			<string>*.mov</string>
+		</dict>
+		<dict>
+			<key>file</key>
+			<string>*.avi</string>
+		</dict>
+		<dict>
+			<key>file</key>
+			<string>*.m2ts</string>
+		</dict>
+		<dict>
+			<key>file</key>
+			<string>*.mp4</string>
+		</dict>
+		<dict>
+			<key>file</key>
+			<string>*.iso</string>
+		</dict>
+		<dict>
+			<key>file</key>
+			<string>*.mpg</string>
+		</dict>
+		<dict>
+			<key>file</key>
+			<string>*.ts</string>
+		</dict>
 	</array>
 	<key>HandBrakePreset</key>
 	<string>AppleTV 3</string>

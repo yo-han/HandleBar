@@ -40,6 +40,13 @@ def fileExists(file):
 	if not os.path.exists(configPath + '/' + file):
 		shutil.copyfile(filePath, configPath + '/' + file)	
 		
+def dictsToArray(list,key):
+	items = []
+	for k in range(len(list)):
+		items.append(list[k][key])
+	
+	return items		
+
 fileExists('config.plist')
 fileExists('handleBar.db')
  
@@ -49,17 +56,16 @@ Config = plistlib.readPlist(configPath + '/config.plist')
 DebugMode  = Config["Debug"]
 NotificationOn  = Config[ "NotificationOn"]
 
-HandbrakeCLIPath = path + Config["HandbrakeCLIPath"]
 DebugRemovePath = Config["DebugRemovePath"]
 DebugFailedPath = Config["DebugFailedPath"]
 SubtitlePath = Config["SubtitlePath"]
 ReadyPath = Config["ReadyPath"]
-MediaPaths = Config["MediaPaths"]
-ReSubSearchPaths = Config["ReSubSearchPaths"]
+MediaPaths = dictsToArray(Config["MediaPaths"],'path')
+ReSubSearchPaths = dictsToArray(Config["ReSubSearchPaths"],'path')
 HandleBarConfigPath = configPath
 HandleBarBinPath = path
 
-FileTypes = Config["FileTypes"]
+FileTypes = dictsToArray(Config["FileTypes"],'file')
 HandBrakePreset = Config["HandBrakePreset"]
 HandBrakeLanguage = Config["HandBrakeLanguage"]
 SubtitleLanguage = Config["SubtitleLanguage"]

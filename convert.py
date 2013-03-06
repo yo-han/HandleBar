@@ -49,7 +49,7 @@ class hbHandle(object):
 
     		audioTracks = self.getAudioTracks(oldFilepath)
 
-    		os.system('nice -n 20 ' + HandbrakeCLIPath + ' -i "' + oldFilepath + '" -o "' + newFilepath + '" --audio "' + audioTracks + '" --preset "' + HandBrakePreset + '" --native-language "' + HandBrakeLanguage + '" --native-dub 1> /tmp/handleBarEncode.status')    
+    		os.system('nice -n 20 ' + HandleBarBinPath + '/bin/HandBrakeCLI -i "' + oldFilepath + '" -o "' + newFilepath + '" --audio "' + audioTracks + '" --preset "' + HandBrakePreset + '" --native-language "' + HandBrakeLanguage + '" --native-dub 1> /tmp/handleBarEncode.status')    
     		
     		try:
     			with open(newFilepath) as f: pass
@@ -62,6 +62,8 @@ class hbHandle(object):
     		Notify('Convert done file: ' + oldFilename,'HandleBar')
 
     		if DebugMode:
+    			print oldFilepath
+    			print HandleBarConfigPath + '/' + DebugRemovePath + '/' + oldFilename
     			os.rename(oldFilepath, HandleBarConfigPath + '/' + DebugRemovePath + '/' + oldFilename)
     		else:
     			os.remove(oldFilepath)
