@@ -127,7 +127,9 @@ class ConvertDaemon(Daemon):
 			"""
 
 			time.sleep(5)
-			hb.check()
+			
+			if isThisRunning('HandbrakeCLI') == False:
+				hb.check()
         	 
 if __name__ == "__main__":
 
@@ -141,7 +143,10 @@ if __name__ == "__main__":
 		elif 'restart' == sys.argv[1]:
 			daemon.restart()
 		elif 'test' == sys.argv[1]:
-			hb.check()
+			if isThisRunning('HandbrakeCLI') == False:
+				hb.check()
+			else:
+				print "ai"
 		elif 'metatest' == sys.argv[1]:
 			md = metadata(sys.argv[2], 1)
 			result = md.parseFile()
