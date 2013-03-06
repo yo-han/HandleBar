@@ -1,4 +1,4 @@
-import ConfigParser, os, sys, shutil
+import ConfigParser, os, sys, shutil, plistlib
 
 path = os.path.abspath(os.path.dirname(__file__)) + "/../"
 
@@ -40,35 +40,30 @@ def fileExists(file):
 	if not os.path.exists(configPath + '/' + file):
 		shutil.copyfile(filePath, configPath + '/' + file)	
 		
-fileExists('config.ini')
+fileExists('config.plist')
 fileExists('handleBar.db')
-
+ 
 """ Config """
-Config = ConfigParser.ConfigParser()
-Config.read(configPath + "/config.ini")
+Config = plistlib.readPlist(configPath + '/config.plist')
     
-DebugMode  = Config.getboolean("HandleBarConfig", "Debug")
-NotificationOn  = Config.getboolean("HandleBarConfig", "NotificationOn")
+DebugMode  = Config["Debug"]
+NotificationOn  = Config[ "NotificationOn"]
 
-HandbrakeCLIPath = path + Config.get("HandleBarConfig","HandbrakeCLIPath")
-DebugRemovePath = Config.get("HandleBarConfig","DebugRemovePath")
-DebugFailedPath = Config.get("HandleBarConfig","DebugFailedPath")
-SubtitlePath = Config.get("HandleBarConfig","SubtitlePath")
-ReadyPath = Config.get("HandleBarConfig","ReadyPath")
-MediaPathsString = Config.get("HandleBarConfig","MediaPaths")
-ReSubSearchPathsString = Config.get("HandleBarConfig","ReSubSearchPaths")
+HandbrakeCLIPath = path + Config["HandbrakeCLIPath"]
+DebugRemovePath = Config["DebugRemovePath"]
+DebugFailedPath = Config["DebugFailedPath"]
+SubtitlePath = Config["SubtitlePath"]
+ReadyPath = Config["ReadyPath"]
+MediaPaths = Config["MediaPaths"]
+ReSubSearchPaths = Config["ReSubSearchPaths"]
 HandleBarConfigPath = configPath
 HandleBarBinPath = path
 
-FileTypeString = Config.get("HandleBarConfig","FileTypes")
-HandBrakePreset = Config.get("HandleBarConfig","HandBrakePreset")
-HandBrakeLanguage = Config.get("HandleBarConfig","HandBrakeLanguage")
-SubtitleLanguage = Config.get("HandleBarConfig","SubtitleLanguage")
-SubtitleLanguageISO = Config.get("HandleBarConfig","SubtitleLanguageISO")
-
-MediaPaths = MediaPathsString.split(',')
-ReSubSearchPaths = ReSubSearchPathsString.split(',')
-FileTypes = FileTypeString.split(',')
+FileTypes = Config["FileTypes"]
+HandBrakePreset = Config["HandBrakePreset"]
+HandBrakeLanguage = Config["HandBrakeLanguage"]
+SubtitleLanguage = Config["SubtitleLanguage"]
+SubtitleLanguageISO = Config["SubtitleLanguageISO"]
 
 dirExists(path + DebugRemovePath)
 dirExists(path + DebugFailedPath)
