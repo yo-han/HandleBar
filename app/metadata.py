@@ -97,7 +97,7 @@ class metadata:
             	print "TV Show"
 				
             	episode = tvEpisode(guess)
-
+            	
             	if episode.foundSeries == False:
             		Notify('No data found for this episode', 'HandleBar')
             		return False
@@ -120,6 +120,7 @@ class metadata:
             			"{Long Description:" + episode.getDescription() + "}", 
             			"{Rating:" + episode.getRating() + "}",
             			"{Director:" + episode.getCast() + "}",
+            			"{Grouping:" + episode.getGrouping() + "}",
             			"{Media Kind:TV Show}",
             			"{Comments:Original filename " + os.path.basename(self.filePath) + "}"]   
             			        	      	

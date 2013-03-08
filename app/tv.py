@@ -19,6 +19,7 @@ class tvEpisode:
 		self.seriesImage = None
 		self.seriesCast = None
 		self.seriesImdbId = None
+		self.seriesGrouping = None
 		self.foundSeries = False
 		
 		self._setTitle(serieData['series'])
@@ -37,7 +38,7 @@ class tvEpisode:
 
 		try:
 			tvdb = tvdb_api.Tvdb(banners=True)
-			
+					
 			title = self.getTitle()
 			series = tvdb[title]
 			season = int(self.getSeason())
@@ -62,8 +63,33 @@ class tvEpisode:
 		
 		except:
 			import sys
-			print "Unexpected error:", sys.exc_info()[0]
-			return False
+			
+			print "TheTVDB failed by unexpected error:", sys.exc_info()[0]
+			print "Try TVRage instead"
+			
+			return self._useTVRage()
+			
+	def _useTVRage(self):
+		
+		title = self.getTitle()
+		season = int(self.getSeason())
+		episode = int(self.getEpisode())
+		
+		tvr = tvrage.api.Show(title)
+		
+		seasonData = tvr.season(season).episode(episode)
+		
+		self._setTitle(tvr.name)
+		self._setEpisodeName(seasonData.title)
+		self._setAirDate(seasonData.airdate)
+		self._setGenre("'" + ",".join(tvr.genres) + "'")
+		self._setGrouping('NeedsArtwork')
+		
+		self.foundSeries = True
+		""""
+		self._setArtwork(series['_banners']['season']['season'], season, tvdb)
+		"""
+		return True
 			
 	def _setTitle(self, title):
 		
@@ -131,7 +157,12 @@ class tvEpisode:
 			if artwork['language'] == "en" and int(artwork['season']) == season:
 				self.seriesImage = artwork['_bannerpath']
 				break
-				
+	
+	def _setGrouping(self, text):
+		
+		if text is not None:
+			self.seriesGrouping = text.strip()
+						
 	def getTitle(self): 
 		if self.seriesTitle is not None:
 			return self.seriesTitle
@@ -216,6 +247,12 @@ class tvEpisode:
 	def getImdbId(self): 
 		if self.seriesImdbId is not None:
 			return self.seriesImdbId
+		else:
+			return ""
+			
+	def getGrouping(self): 
+		if self.seriesGrouping is not None:
+			return self.seriesGrouping
 		else:
 			return ""		
 			
