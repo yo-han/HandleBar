@@ -22,5 +22,7 @@ tvdb_api [website](https://github.com/dbr/tvdb_api)
 themoviedb [website](https://github.com/dbr/themoviedb)  
 SublerCLI [website](http://code.google.com/p/subler/)  
 HandBrakeCLI [website](http://handbrake.fr/)  
+send2trash [website](http://hg.hardcoded.net/send2trash/overview)  
+python-tvrage [website](https://github.com/ckreutzer/python-tvrage)  
 
 
