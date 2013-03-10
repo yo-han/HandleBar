@@ -25,7 +25,7 @@ def moveToItunes(file):
 				end tell
 				EOF""" % file)
 							
-	os.remove(file)
+	send2trash(file)
 	
 def parseFailedFiles():
 	

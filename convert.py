@@ -28,6 +28,11 @@ class hbHandle(object):
     	if not files:
     		
     		print "No files found"
+    		
+    		""" Send in a cleanup crew """
+    		self.cleanMediaDirs(path)
+    		
+    		""" Update the convert status for the webview """
     		updateConvertStatus("Idle")	
     		    			
     	else:
@@ -62,11 +67,10 @@ class hbHandle(object):
     		Notify('Convert done file: ' + oldFilename,'HandleBar')
 
     		if DebugMode:
-    			print oldFilepath
-    			print HandleBarConfigPath + '/' + DebugRemovePath + '/' + oldFilename
+    			
     			os.rename(oldFilepath, HandleBarConfigPath + '/' + DebugRemovePath + '/' + oldFilename)
     		else:
-    			os.remove(oldFilepath)
+    			send2trash(oldFilepath)
     		
     		""" SUBS """
     		sub = subs(newFilepath, type)
@@ -94,13 +98,26 @@ class hbHandle(object):
     	media = []
     	
     	for root, dirs, files in os.walk(path):
+
     		for files in FileTypes:
+
     			fp = root + '/' + files
     			
     			if fp.find('_UNPACK_') < 0:
     				media.extend(glob.glob(fp))
-    	
+    				
     	return media
+    	
+    def cleanMediaDirs(self, path):	
+    	
+    	import shutil
+    	
+    	for root, dirs, files in os.walk(path):
+
+    		for dir in dirs:
+
+    			fp = root + '/' + dir
+    			send2trash(fp)
     	
     def getAudioTracks(self, file):
 	
