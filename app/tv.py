@@ -83,7 +83,7 @@ class tvEpisode:
 		self._setEpisodeName(seasonData.title)
 		self._setAirDate(seasonData.airdate)
 		self._setGenre("'" + ",".join(tvr.genres) + "'")
-		self._setGrouping('NeedsArtwork')
+		self._setGrouping('TVRage')
 		
 		self.foundSeries = True
 		""""

@@ -31,10 +31,10 @@ class metadata:
         	self.guess = guessit.guess_video_info(self.filePath, info = ['filename'])
         	
         def addSubtitles(self, originalFilePath):
-	        print self.subtitlePath
+
         	if os.path.exists(self.subtitlePath):
 				arguments = [self.SublerCLIPath, "-dest", originalFilePath, "-source", self.subtitlePath,"-language",SubtitleLanguage]
-				print originalFilePath	
+
 				logProc = open("/tmp/SublrCLI.log", "a")
 				subprocess.Popen(arguments, shell=False, stdout=logProc, stderr=subprocess.STDOUT, preexec_fn = self.preexec).communicate()
                	
@@ -56,41 +56,42 @@ class metadata:
    	          	               	
             if guess['type'] == "movie":
 				
-            	print "Movie"
+				print "Movie"
 					
-            	mvd = movie(guess['title'])
-
-            	if mvd.foundMovie == False:
-            		Notify('No data found for this movie', 'HandleBar')
-            		return False
-					
-            	image = self.downloadImage(mvd.getImage())     
-					
-            	Notify('Set metadata movie:\n' + mvd.getName(), 'HandleBar')
-
-            	tags = ["{Artwork:" + image + "}", 
-            			"{HD Video:" + hdb + "}", 
-            			"{Name:" + mvd.getName() + "}", 
-            			"{Director:" + mvd.getDirector() + "}", 
-            			"{Producer:" + mvd.getProducer() + "}", 
-            			"{Cast:" + mvd.getCast() + "}", 
-            			"{Genre:" + mvd.getGenre() + "}", 
-            			"{Release Date:" + mvd.getReleased() + "}", 
-            			"{Description:" + mvd.getDescription() + "}", 
-            			"{Long Description:" + mvd.getDescription() + "}", 
-            			"{Rating:" + mvd.getRating() + "}", 
-            			"{contentID:" + mvd.getImdbId() + "}",
-            			"{Media Kind:Movie}",
-            			"{Comments:Original filename " + os.path.basename(self.filePath) + "}"]   
-            			        	      	
-            	arguments = [self.SublerCLIPath, "-optimize", "-dest", self.filePath, "-source", subtitles, "-metadata", "".join(tags),"-language",SubtitleLanguage]
+				mvd = movie(guess['title'])
 				
-            	logProc = open("/tmp/SublrCLI.log", "a")
-            	subprocess.Popen(arguments, shell=False, stdout=logProc, stderr=subprocess.STDOUT, preexec_fn = self.preexec).communicate()
-
-            	filesTable.movie(self.fileId, mvd.getName(), os.path.basename(image), mvd.getDirector(), mvd.getGenre(), mvd.getReleased(), mvd.getDescription(), mvd.getRating(), mvd.getImdbId(), hdb)
+				if mvd.foundMovie == False:
+					Notify('No data found for this movie', 'HandleBar')
+					return False
 				
-            	return True      	
+				imageFilename = "movie-" + mvd.getName() + ".jpg"
+				image = self.downloadImage(mvd.getImage(), imageFilename)     
+					
+				Notify('Set metadata movie:\n' + mvd.getName(), 'HandleBar')
+				
+				tags = ["{Artwork:" + image + "}", 
+						"{HD Video:" + hdb + "}", 
+						"{Name:" + mvd.getName() + "}", 
+						"{Director:" + mvd.getDirector() + "}", 
+						"{Producer:" + mvd.getProducer() + "}", 
+						"{Cast:" + mvd.getCast() + "}", 
+						"{Genre:" + mvd.getGenre() + "}", 
+						"{Release Date:" + mvd.getReleased() + "}", 
+						"{Description:" + mvd.getDescription() + "}", 
+						"{Long Description:" + mvd.getDescription() + "}", 
+						"{Rating:" + mvd.getRating() + "}", 
+						"{contentID:" + mvd.getImdbId() + "}",
+						"{Media Kind:Movie}",
+						"{Comments:Original filename " + os.path.basename(self.filePath) + "}"]   
+						        	      	
+				arguments = [self.SublerCLIPath, "-optimize", "-dest", self.filePath, "-source", subtitles, "-metadata", "".join(tags),"-language",SubtitleLanguage]
+				
+				logProc = open("/tmp/SublrCLI.log", "a")
+				subprocess.Popen(arguments, shell=False, stdout=logProc, stderr=subprocess.STDOUT, preexec_fn = self.preexec).communicate()
+				
+				filesTable.movie(self.fileId, mvd.getName(), os.path.basename(image), mvd.getDirector(), mvd.getGenre(), mvd.getReleased(), mvd.getDescription(), mvd.getRating(), mvd.getImdbId(), hdb)
+				
+				return True      	
             	
             elif guess['type'] == "episode":
 				
@@ -103,7 +104,9 @@ class metadata:
             		return False
 
             	title = episode.getTitleClean()
-            	image = self.downloadImage(episode.getImage())    
+            	
+            	imageFilename = "tv-" + title + "-" + episode.getSeason() + ".jpg"
+            	image = self.downloadImage(episode.getImage(), imageFilename)    
            					
             	Notify('Set metadata tv show:\n' + title, 'HandleBar')
 
@@ -139,11 +142,14 @@ class metadata:
         def preexec(self):
 	    	os.setpgrp()
 	    		
-        def downloadImage(self, url):
+        def downloadImage(self, url, filename):
         	
-        	path = HandleBarConfigPath + '/media/images/' + os.path.basename(url)
+        	path = HandleBarConfigPath + '/media/images/' + filename
         	downloaded = False
         	
+        	if os.path.exists(path):
+        		return path
+        		
         	for i in range(0,5):
         		try:
         			r = requests.get(url, timeout=1)
