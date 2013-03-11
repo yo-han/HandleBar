@@ -2,8 +2,8 @@
 HandleBar is my first Python project and still in progress. The current master may or not be stable at this moment, it differs with the day. 
 Comments, ideas or suggestions are welcome any time.
 
-## Goal ##
-Converting videos to an iTunes format with the correct metadata, cover and subtitles.
+## About ##
+HandleBar monitors directories for new video files. These video files are converted in a iTunes supported format using the HandbrakeCLI, tagged with the right metadata and artwork and copied to iTunes. If any can be found, subtitles are also added in the prefered language. All can be monitored using the webinterface.
 
 Check [HandleBarMenulet](https://github.com/yo-han/HandleBarMenulet) for a nice Cocoa menulet wrapper around this code.
 
@@ -11,6 +11,15 @@ Check [HandleBarMenulet](https://github.com/yo-han/HandleBarMenulet) for a nice 
 If you plan to use the handleBar subtitles service `lxml` is required. Installing `lxml` is easy:
 
 `$ sudo easy_install lxml`
+
+## Run ##
+Change config.plist to your needs.
+
+`$ convert.py start #starts the convert daemon`
+
+`$ web.py start #starts the webinterface`
+
+`$ reSub.py #searches for subtitles for files without and converted with HandleBar`
 
 ## HandleBar wouldn't be possible without: ##
 Unix Daemon by Sander Marechal [website](http://www.jejik.com/articles/2007/02/a_simple_unix_linux_daemon_in_python/)  
