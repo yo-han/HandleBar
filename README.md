@@ -1,6 +1,6 @@
 # HandleBar #
 HandleBar is my first Python project and still in progress. The current master may or not be stable at this moment, it differs with the day. 
-Comments, ideas or suggestion are welcome any time.
+Comments, ideas or suggestions are welcome any time.
 
 ## Goal ##
 Converting videos to an iTunes format with the correct metadata, cover and subtitles.
