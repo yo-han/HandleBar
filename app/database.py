@@ -9,7 +9,7 @@ try:
 	appSupportPath = pf.read().strip()
 	pf.close()
 except IOError:
-	print "Not running in menulet"
+	pass
 
 if path.find("HandleBarApp.app") is not -1:
 	dbPath = appSupportPath
