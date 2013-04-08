@@ -220,7 +220,7 @@ class Language(UnicodeMixin):
             raise ValueError(msg)
 
         if self.lang is None:
-            log.debug(msg)
+            #log.debug(msg)
             self.lang = 'und'
 
     @property
