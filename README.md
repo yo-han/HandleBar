@@ -1,11 +1,11 @@
 # HandleBar #
-HandleBar is my first Python project and still in progress. The current master may or not be stable at this moment, it differs with the day. 
+HandleBar is my prototype project for the OS X version. The current master is pretty stable but development is stopped for now.
 Comments, ideas or suggestions are welcome any time.
 
 ## About ##
 HandleBar monitors directories for new video files. These video files are converted in a iTunes supported format using the HandbrakeCLI, tagged with the right metadata and artwork and copied to iTunes. If any can be found, subtitles are also added in the prefered language. All can be monitored using the webinterface.
 
-Check [HandleBarMenulet](https://github.com/yo-han/HandleBarMenulet) for a nice Cocoa menulet wrapper around this code.
+Check [HandleBarApp](https://github.com/yo-han/HandleBarApp) for a the OS X version of this code.
 
 ## Requirements ##
 If you plan to use the handleBar subtitles service `lxml` is required. Installing `lxml` is easy:
